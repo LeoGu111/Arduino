@@ -1,19 +1,16 @@
 #include <display.h>
 
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
- 
- RTC_DS3231 rtc;
-char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
 
 
 void HomeBildschirm(){
 DateTime now = rtc.now();
 display.setCursor(0,20);
+display.println("-");
 display_draw_time(now);
-//display_draw_date(now);
-//display.display(); 
-//Serial.print("      hi");
+display_draw_date(now);
+display.display(); 
+Serial.print("      hi");
 
 }
 void display_draw_date(DateTime now)
