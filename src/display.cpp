@@ -1,17 +1,20 @@
-#include "display.h"
+#include <display.h>
+
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+ 
+ RTC_DS3231 rtc;
+char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
 
-
-void loop()
-{
-HomeBildschirm;
-}
 
 void HomeBildschirm(){
 DateTime now = rtc.now();
+display.setCursor(0,20);
 display_draw_time(now);
-display_draw_date(now);
-display.display(); 
+//display_draw_date(now);
+//display.display(); 
+//Serial.print("      hi");
+
 }
 void display_draw_date(DateTime now)
 {
@@ -78,4 +81,46 @@ display.print("Lucas, Leo");
 display.display();
 delay(3000);
 
+}
+void Menue_1()
+{
+display.clearDisplay();
+display.setTextColor(WHITE);
+display.setTextSize(2);
+display.setCursor(20,0);
+display.print(Menue_eintrag_1);
+display.drawRect(0, 0, 128, 24, WHITE);
+display.setCursor(20,20);
+display.print(Menue_eintrag_2);
+display.setCursor(0,40);
+display.print(Menue_eintrag_3);
+display.display();
+}
+void Menue_2()
+{
+display.clearDisplay();
+display.setTextColor(WHITE);
+display.setTextSize(2);
+display.setCursor(20,0);
+display.print(Menue_eintrag_1);
+display.setCursor(20,20);
+display.print(Menue_eintrag_2);
+display.drawRect(0, 0, 128, 24, WHITE);
+display.setCursor(0,40);
+display.print(Menue_eintrag_3);
+display.display();
+}
+void Menue_3()
+{
+display.clearDisplay();
+display.setTextColor(WHITE);
+display.setTextSize(2);
+display.setCursor(20,0);
+display.print(Menue_eintrag_1);
+display.setCursor(20,20);
+display.print(Menue_eintrag_2);
+display.setCursor(0,40);
+display.print(Menue_eintrag_3);
+display.drawRect(0, 0, 128, 24, WHITE);
+display.display();
 }
