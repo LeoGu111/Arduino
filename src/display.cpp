@@ -75,45 +75,51 @@ display.display();
 delay(3000);
 
 }
-void Menue_1()
+void Menue_1(int X)
 {
 display.clearDisplay();
 display.setTextColor(WHITE);
 display.setTextSize(2);
 display.setCursor(30,2);
 display.print(Menue_eintrag_1);
-display.drawRect(0, 0, 128, 19, WHITE);
+display.drawRect(0, X, 128, 19, WHITE);
 display.setCursor(2,24);
 display.print(Menue_eintrag_2);
 display.setCursor(12,42);
 display.print(Menue_eintrag_3);
 display.display();
 }
-void Menue_2()
+void SubMenue_1_1(int X, int H_1, int M_1, int S_1, int H_2, int M_2, int S_2, int H_3, int M_3, int S_3)
 {
 display.clearDisplay();
 display.setTextColor(WHITE);
 display.setTextSize(2);
-display.setCursor(30,2);
-display.print(Menue_eintrag_1);
-display.setCursor(2,24);
-display.print(Menue_eintrag_2);
-display.drawRect(0, 22, 128, 19, WHITE);
-display.setCursor(12,42);
-display.print(Menue_eintrag_3);
+
+display.setCursor(center_function(H_1,M_1,S_1),2);
+display.printf("%d:%d:%d", H_1, M_1, S_1);
+
+display.setCursor(center_function(H_2,M_2,S_2),24);
+display.printf("%d:%d:%d", H_2, M_2, S_2);
+
+
+display.setCursor(center_function(H_3,M_3,S_3),42);
+display.printf("%d:%d:%d", H_3, M_3, S_3);
+
+display.drawRect(0, X, 128, 19, WHITE);
+
 display.display();
 }
-void Menue_3()
+int center_function(int H_1,int M_1,int S_1)
 {
-display.clearDisplay();
-display.setTextColor(WHITE);
-display.setTextSize(2);
-display.setCursor(30,2);
-display.print(Menue_eintrag_1);
-display.setCursor(2,24);
-display.print(Menue_eintrag_2);
-display.setCursor(12,42);
-display.print(Menue_eintrag_3);
-display.drawRect(0, 40, 128, 19, WHITE);
-display.display();
+int digitCount_H = (H_1 != 0) ? ((int)log10(abs(H_1)) + 1) : 1;
+int digitCount_M = (M_1 != 0) ? ((int)log10(abs(M_1)) + 1) : 1;
+int digitCount_S = (S_1 != 0) ? ((int)log10(abs(S_1)) + 1) : 1;
+
+//+1 wegen den : bei der Zahlen trennung
+
+int versatz_1 = 32 - (digitCount_H + digitCount_M + digitCount_S + 1)/2;
+Serial.print("Versatz_1: ");
+Serial.println(versatz_1);
+
+return abs(versatz_1);
 }

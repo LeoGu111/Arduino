@@ -34,12 +34,23 @@ display_starting_screen();
 
 void loop()
 {
+
 HomeBildschirm();
 delay(3000);
-Menue_1();
+int X = 0;
+Menue_1(X);
 delay(1000);
-Menue_2();
+int Y = 22;
+Menue_1(Y);
 delay(1000);
-Menue_3();
+int Z = 40;
+Menue_1(Z);
+delay(1000);
+
+SubMenue_1_1(X, 1,0,0, 1,50,0, 2,0,0);
+delay(1000);
+SubMenue_1_1(Y, 1,0,0, 1,50,0, 2,0,0);
+delay(1000);
+SubMenue_1_1(Z, 1,0,0, 1,50,0, 2,0,0);
 delay(1000);
 }
