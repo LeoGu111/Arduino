@@ -24,8 +24,8 @@
 #define SCREEN_HEIGHT 64  // OLED display height, in pixels
 #define OLED_RESET    -1  // Reset pin # (or -1 if sharing reset pin)
 #define Menue_eintrag_1 "Timer"
-#define Menue_eintrag_2 "Induviduelle Timer"
-#define Menue_eintrag_3 "Einstellungen"
+#define Menue_eintrag_2 "Ind. Timer"
+#define Menue_eintrag_3 "Settings"
 
 //-------------------------------------------------------------------------------
 
@@ -38,6 +38,9 @@ void HomeBildschirm();
 void display_draw_date(DateTime now);
 void display_draw_time(DateTime now);
 void display_starting_screen();
+void Menue_1();
+void Menue_2();
+void Menue_3();
 
 extern Adafruit_SSD1306 display;
  

@@ -5,13 +5,9 @@
 
 void HomeBildschirm(){
 DateTime now = rtc.now();
-display.setCursor(0,20);
-display.println("-");
 display_draw_time(now);
 display_draw_date(now);
 display.display(); 
-Serial.print("      hi");
-
 }
 void display_draw_date(DateTime now)
 {
@@ -84,12 +80,12 @@ void Menue_1()
 display.clearDisplay();
 display.setTextColor(WHITE);
 display.setTextSize(2);
-display.setCursor(20,0);
+display.setCursor(30,2);
 display.print(Menue_eintrag_1);
-display.drawRect(0, 0, 128, 24, WHITE);
-display.setCursor(20,20);
+display.drawRect(0, 0, 128, 19, WHITE);
+display.setCursor(2,24);
 display.print(Menue_eintrag_2);
-display.setCursor(0,40);
+display.setCursor(12,42);
 display.print(Menue_eintrag_3);
 display.display();
 }
@@ -98,12 +94,12 @@ void Menue_2()
 display.clearDisplay();
 display.setTextColor(WHITE);
 display.setTextSize(2);
-display.setCursor(20,0);
+display.setCursor(30,2);
 display.print(Menue_eintrag_1);
-display.setCursor(20,20);
+display.setCursor(2,24);
 display.print(Menue_eintrag_2);
-display.drawRect(0, 0, 128, 24, WHITE);
-display.setCursor(0,40);
+display.drawRect(0, 22, 128, 19, WHITE);
+display.setCursor(12,42);
 display.print(Menue_eintrag_3);
 display.display();
 }
@@ -112,12 +108,12 @@ void Menue_3()
 display.clearDisplay();
 display.setTextColor(WHITE);
 display.setTextSize(2);
-display.setCursor(20,0);
+display.setCursor(30,2);
 display.print(Menue_eintrag_1);
-display.setCursor(20,20);
+display.setCursor(2,24);
 display.print(Menue_eintrag_2);
-display.setCursor(0,40);
+display.setCursor(12,42);
 display.print(Menue_eintrag_3);
-display.drawRect(0, 0, 128, 24, WHITE);
+display.drawRect(0, 40, 128, 19, WHITE);
 display.display();
 }
