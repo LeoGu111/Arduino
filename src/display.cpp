@@ -1,23 +1,28 @@
 #include <display.h>
 
+
 // funktion für die Start up sequenz zur diagnose ob Startup fehlgeschlagen
 void display_starting_screen()
 {
 display.clearDisplay();
 display.setTextColor(WHITE);
 display.setTextSize(2);
-display.drawRect(0, 64, 128, 19, WHITE);
-delay(500);
+display.drawRect(0, 0, 128, 64, WHITE);
 display.display();
-display.drawRect(0, 56, 120, 19, WHITE);
 delay(500);
+
+display.drawRect(4, 8, 120, 48, WHITE);
 display.display();
-display.drawRect(0, 48, 112, 19, WHITE);
 delay(500);
+
+display.drawRect(8, 16, 112, 32, WHITE);
 display.display();
-display.drawRect(0, 40, 114, 19, WHITE);
 delay(500);
+
+display.drawRect(12, 24, 104, 16, WHITE);
 display.display();
+delay(500);
+
 }
 // funktion für die Start up sequenz
 void display_starting_screen_1()
@@ -25,11 +30,11 @@ void display_starting_screen_1()
 display.clearDisplay();
 display.setTextColor(WHITE);
 display.setTextSize(2);
-display.setCursor(64-2,0);
+display.setCursor(32,0);
 display.print("Timer");
-display.setCursor(64-6,20);
+display.setCursor(24,20);
 display.print("Projekt");
-display.setCursor(64-5,40);
+display.setCursor(4,40);
 display.print("Lucas, Leo");
 display.display();
 delay(3000);
@@ -37,25 +42,12 @@ delay(3000);
 //vollständige Start Sequenz mit RTC Fehlermeldung 
 void display_RTC_Start_sequenz()
 {
-//Start der Seriellen Kommunikation
-Serial.begin(115200);
 
 //StartBildschirm 1 um zusehen ob die RTC gefunden wurde 
+display_starting_screen();
+//Startbildschirm RTC wurde erfolglreich gefunden
 display_starting_screen_1();
 
-//Fehlermeldung auf die Serielleschnittstelle wenn der RTC nicht gefunden wird 
-if (! rtc.begin()) {
-Serial.println("Couldn't find RTC");
-while (1);              
-}
-if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) 
-{ 
-    Serial.println(F("SSD1306 allocation failed"));
-    for(;;); // Don't proceed, loop forever
-}
-
-//Startbildschirm RTC wurde erfolglreich gefunden
-display_starting_screen();
 }
 // funktion für den Allgm Homebildschirm mit uhrzeit und datum
 void HomeBildschirm(){
@@ -122,12 +114,12 @@ void Menue_1(int X)
 display.clearDisplay();
 display.setTextColor(WHITE);
 display.setTextSize(2);
-display.setCursor(30,2);
+display.setCursor(32,2);
 display.print(Menue_eintrag_1);
 display.drawRect(0, X, 128, 19, WHITE);
-display.setCursor(2,24);
+display.setCursor(4,24);
 display.print(Menue_eintrag_2);
-display.setCursor(12,42);
+display.setCursor(16,42);
 display.print(Menue_eintrag_3);
 display.display();
 }
@@ -138,20 +130,20 @@ display.clearDisplay();
 display.setTextColor(WHITE);
 display.setTextSize(2);
 //Schreib zentriert die werte für Stunden minuten und sekunden
-display.setCursor(center_function(H_1,M_1,S_1),2);
+display.setCursor(center_function(H_1,M_1,S_1,12),2);
 display.printf("%d:%d:%d", H_1, M_1, S_1);
 //Schreib zentriert die werte für Stunden minuten und sekunden
-display.setCursor(center_function(H_2,M_2,S_2),24);
+display.setCursor(center_function(H_2,M_2,S_2,12),24);
 display.printf("%d:%d:%d", H_2, M_2, S_2);
 //Schreib zentriert die werte für Stunden minuten und sekunden
-display.setCursor(center_function(H_3,M_3,S_3),42);
+display.setCursor(center_function(H_3,M_3,S_3,12),42);
 display.printf("%d:%d:%d", H_3, M_3, S_3);
 //Zeichnet den Curser über die verschiedenen Zeiten
 display.drawRect(0, X, 128, 19, WHITE);
 display.display();
 }
-// funktion um die Uhrzeiten zu zentrien
-int center_function(int H_1,int M_1,int S_1)
+// funktion um die Uhrzeiten zu zentrien X ist die größe de Buchstaben
+int center_function(int H_1,int M_1,int S_1, int X)
 {
 int digitCount_H = (H_1 != 0) ? ((int)log10(abs(H_1)) + 1) : 1;
 int digitCount_M = (M_1 != 0) ? ((int)log10(abs(M_1)) + 1) : 1;
@@ -159,7 +151,7 @@ int digitCount_S = (S_1 != 0) ? ((int)log10(abs(S_1)) + 1) : 1;
 
 //+1 wegen den : bei der Zahlen trennung
 
-int versatz_1 = 32 - (digitCount_H + digitCount_M + digitCount_S + 1)/2;
+int versatz_1 = 64 - ((digitCount_H * X + digitCount_M * X + digitCount_S * X + 2 * X)/2);
 Serial.print("Versatz_1: ");
 Serial.println(versatz_1);
 
