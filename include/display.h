@@ -14,6 +14,7 @@
 #include <Adafruit_SSD1306.h>
 #include <RTClib.h>
 #include <time.h>
+#include <RotaryEncoder.h>
 
 //-------------------------------------------------------------------------------
 
@@ -28,6 +29,11 @@
 #define Menue_eintrag_2 "Ind. Timer"
 #define Menue_eintrag_3 "Settings"
 
+#define PIN_DT 35
+#define PIN_CLK 34
+#define PIN_SW 32
+
+
 //-------------------------------------------------------------------------------
 
 //  #function defines
@@ -36,7 +42,7 @@
 
 void display_starting_screen();
 void display_starting_screen_1();
-void display_RTC_Start_sequenz();
+void display_Start_sequenz();
 void HomeBildschirm();
 void display_draw_date(DateTime now);
 void display_draw_time(DateTime now);

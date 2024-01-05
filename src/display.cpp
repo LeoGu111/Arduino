@@ -40,7 +40,7 @@ display.display();
 delay(3000);
 }
 //vollständige Start Sequenz mit RTC Fehlermeldung 
-void display_RTC_Start_sequenz()
+void display_Start_sequenz()
 {
 
 //StartBildschirm 1 um zusehen ob die RTC gefunden wurde 
@@ -149,11 +149,9 @@ int digitCount_H = (H_1 != 0) ? ((int)log10(abs(H_1)) + 1) : 1;
 int digitCount_M = (M_1 != 0) ? ((int)log10(abs(M_1)) + 1) : 1;
 int digitCount_S = (S_1 != 0) ? ((int)log10(abs(S_1)) + 1) : 1;
 
-//+1 wegen den : bei der Zahlen trennung
+//+2 * X wegen den : bei der Zahlen trennung
 
 int versatz_1 = 64 - ((digitCount_H * X + digitCount_M * X + digitCount_S * X + 2 * X)/2);
-Serial.print("Versatz_1: ");
-Serial.println(versatz_1);
 
 return abs(versatz_1);
 }
