@@ -123,31 +123,47 @@ display.setCursor(16,42);
 display.print(Menue_eintrag_3);
 display.display();
 }
+// Timer Menue
+void Menue_Timer(double Timer_1, double Timer_2, double Timer_3)
+{
+display.clearDisplay();
+display.setTextColor(WHITE);
+display.setTextSize(2);
+display.setCursor(center_function(convertFromIndustrialHours(Timer_1),12),2);
+display.printf("%d:%d:%d",convertFromIndustrialHours(Timer_1));
+display.setCursor(center_function(convertFromIndustrialHours(Timer_2),12),22);
+display.printf("%d:%d:%d",convertFromIndustrialHours(Timer_2));
+display.setCursor(center_function(convertFromIndustrialHours(Timer_3),12),42);
+display.printf("%d:%d:%d",convertFromIndustrialHours(Timer_3));
+display.display();
+}
 // SubMenue wo die ersten uhrzeiten angezeigt werden /kommt nach dem bestätigen vom menue punkt "timer" im haupt menue
-void SubMenue_1_1(int X, int H_1, int M_1, int S_1, int H_2, int M_2, int S_2, int H_3, int M_3, int S_3) //X ist die Positon vom Curser für die auswahl
+void SubMenue_1_1(int X, float H_1, float H_2, float H_3) //X ist die Positon vom Curser für die auswahl
 {
 display.clearDisplay();
 display.setTextColor(WHITE);
 display.setTextSize(2);
 //Schreib zentriert die werte für Stunden minuten und sekunden
-display.setCursor(center_function(H_1,M_1,S_1,12),2);
-display.printf("%d:%d:%d", H_1, M_1, S_1);
+display.setCursor(center_function(convertFromIndustrialHours(H_1),12),2);
+display.printf("%d:%d:%d",convertFromIndustrialHours(H_1));
 //Schreib zentriert die werte für Stunden minuten und sekunden
-display.setCursor(center_function(H_2,M_2,S_2,12),24);
-display.printf("%d:%d:%d", H_2, M_2, S_2);
+display.setCursor(center_function(convertFromIndustrialHours(H_2),12),22);
+display.printf("%d:%d:%d",convertFromIndustrialHours(H_2));
 //Schreib zentriert die werte für Stunden minuten und sekunden
-display.setCursor(center_function(H_3,M_3,S_3,12),42);
-display.printf("%d:%d:%d", H_3, M_3, S_3);
+display.setCursor(center_function(convertFromIndustrialHours(H_3),12),42);
+display.printf("%d:%d:%d",convertFromIndustrialHours(H_3));
 //Zeichnet den Curser über die verschiedenen Zeiten
 display.drawRect(0, X, 128, 19, WHITE);
 display.display();
 }
 // funktion um die Uhrzeiten zu zentrien X ist die größe de Buchstaben
-int center_function(int H_1,int M_1,int S_1, int X)
+int center_function(Time industrie, int X)
 {
-int digitCount_H = (H_1 != 0) ? ((int)log10(abs(H_1)) + 1) : 1;
-int digitCount_M = (M_1 != 0) ? ((int)log10(abs(M_1)) + 1) : 1;
-int digitCount_S = (S_1 != 0) ? ((int)log10(abs(S_1)) + 1) : 1;
+Time convertedTime = industrie;
+
+int digitCount_H = (convertedTime.hours != 0) ? ((int)log10(abs(convertedTime.hours)) + 1) : 1;
+int digitCount_M = (convertedTime.minutes != 0) ? ((int)log10(abs(convertedTime.minutes)) + 1) : 1;
+int digitCount_S = (convertedTime.seconds != 0) ? ((int)log10(abs(convertedTime.seconds)) + 1) : 1;
 
 //+2 * X wegen den : bei der Zahlen trennung
 

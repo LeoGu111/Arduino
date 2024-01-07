@@ -7,6 +7,7 @@
 
 //-------------------------------------------------------------------------------
 
+#include <Timer.h>
 #include <Arduino.h>
 #include <SPI.h>
 #include <Wire.h>
@@ -14,7 +15,7 @@
 #include <Adafruit_SSD1306.h>
 #include <RTClib.h>
 #include <time.h>
-#include <RotaryEncoder.h>
+#include <ESP32Encoder.h>
 
 //-------------------------------------------------------------------------------
 
@@ -47,9 +48,9 @@ void HomeBildschirm();
 void display_draw_date(DateTime now);
 void display_draw_time(DateTime now);
 void Menue_1(int X); // = Box kordinaten 0, 22, 40
-void SubMenue_1_1(int X, int H_1, int M_1, int S_1, int H_2, int M_2, int S_2, int H_3, int M_3, int S_3);
-int center_function(int H_1,int M_1,int S_1,int X);
-
+void SubMenue_1_1(int X, float H_1, float H_2, float H_3);
+int center_function(Time industrie,int X);
+void Menue_Timer(double Timer_1, double Timer_2, double Timer_3);
 
 extern Adafruit_SSD1306 display;
  
