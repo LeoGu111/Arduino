@@ -1,5 +1,5 @@
-#ifndef ESP32_Timer_Funktion
-#define ESP32_Timer_Funktion
+#ifndef ESP32_encoder_Funktion
+#define ESP32_encoder_Funktion
 
 //-------------------------------------------------------------------------------
 
@@ -7,8 +7,7 @@
 
 //-------------------------------------------------------------------------------
 
-#include <iostream>
-#include <Arduino.h>
+#include <ESP32Encoder.h>
 
 //-------------------------------------------------------------------------------
 
@@ -16,11 +15,7 @@
 
 //-------------------------------------------------------------------------------
 
-struct Time {
-    int hours;
-    int minutes;
-    int seconds;
-};
+
 
 //-------------------------------------------------------------------------------
 
@@ -28,15 +23,15 @@ struct Time {
 
 //-------------------------------------------------------------------------------
 
-Time convertFromIndustrialHours(double industrialHours);
-void Timer_Main();
+bool debounceEncoder(int rawPosition,  int lastPosition);
+void encoder_position();
+void Setup_Encoder();
 
-extern double Timer_1;
-extern double Timer_2;
-extern double Timer_3;
+extern ESP32Encoder encoder;
+extern unsigned long lastDebounceTime; // Initialize the last debounce time
+extern int lastPosition; // Initialize the last position
+extern const int debounceDelay; // Debounce delay in milliseconds
 
-extern unsigned long previousMillis; // Variable zum Speichern der letzten Zeitmessung
-extern const unsigned long interval; // Intervall in Millisekunden (hier 1 Sekunde)
 
 
 
