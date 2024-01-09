@@ -443,54 +443,53 @@ if((SUB_ACTIVE == 1 and SUB_ACTIVE_2 == 0 and Menue_Timer_1 == 0 and PIN_SW_PF =
 
 void Timer_Einstellen()
 {
-if((SUB_ACTIVE == 1 and SUB_ACTIVE_2 == 0 and Menue_Timer_1 == 0 and PIN_SW_PF == 0) or SUB_ACTIVE_3 == 1){
-  SUB_ACTIVE = 0;
-    switch (pos) {
-      case 0:
-        Menue_Timer(Timer_1/3600, Timer_2/3600, Timer_3/3600);
-        display.drawRect(0, 0, 128, 19, WHITE);
-        display.display();
-        if (PIN_SW_PF == 0 and SUB_ACTIVE_3 == 1)
-        {
-          Timer_1 = floatArray[Number] * 3600.0;
-          SUB_ACTIVE_3 = 0;
-          Menue_Timer_1 = 1;
-          break;
-        }
-        SUB_ACTIVE_3 = 1;  
-        break;
-      case 1:
-        Menue_Timer(Timer_1/3600, Timer_2/3600, Timer_3/3600);
-        display.drawRect(0, 20, 128, 19, WHITE);
-        display.display();
-        if (PIN_SW_PF == 0 and SUB_ACTIVE_3 == 1)
-        {
-          Timer_2 = floatArray[Number] * 3600.0;
-          SUB_ACTIVE_3 = 0;
-          Menue_Timer_1 = 1;
-          break;
-        }
-        SUB_ACTIVE_3 = 1;  
-        break;
-      case 2:
-        Menue_Timer(Timer_1/3600, Timer_2/3600, Timer_3/3600);
-        display.drawRect(0, 40, 128, 19, WHITE);
-        display.display();
-        if (PIN_SW_PF == 0 and SUB_ACTIVE_3 == 1)
-        {
-          Timer_3 = floatArray[Number] * 3600.0;
-          SUB_ACTIVE_3 = 0;
-          Menue_Timer_1 = 1;
-          break;
-        }
-        SUB_ACTIVE_3 = 1;  
-        break;
-      default:
-        break;
+if((SUB_ACTIVE == 0 and SUB_ACTIVE_2 == 1 and Menue_Timer_1 == 0 and PIN_SW_PF == 0) or SUB_ACTIVE_3 == 1){
+while (true)
+{
+int i = 0;
+int H = 0;
+int M = 0;
+int S = 0;
+double Zeit = 0;
+if (PIN_SW_PF == 0)
+{
+  i++;
 }
-}
+else if (i > 3)
+{
+  break;
 }
 
+
+switch (i)
+{
+case 0:
+  H = pos;
+  break;
+case 1:
+  M = pos;
+  break;
+case 2:
+  S = pos;
+  break;
+}
+
+Zeit = Zeit + H * 3600;
+Zeit = Zeit + M * 60;
+Zeit = Zeit + S;
+
+display.clearDisplay();
+display.setCursor(center_function(convertFromIndustrialHours(Zeit),12),22);
+display.printf("%d:%d:%d",convertFromIndustrialHours(Zeit));
+display.display();
+}
+
+floatArray[pos];
+
+
+
+}
+}
 
 
 

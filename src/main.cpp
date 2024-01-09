@@ -1,8 +1,8 @@
 #include <display.h>
 
-double Timer_1 = 0;
-double Timer_2 = 0;
-double Timer_3 = 0;
+double long Timer_1 = 0.0;
+double long Timer_2 = 0.0;
+double long Timer_3 = 0.0;
 unsigned long previousMillis = 0; // Variable zum Speichern der letzten Zeitmessung
 const unsigned long interval = 1000; // Intervall in Millisekunden (hier 1 Sekunde)
 int Number = 1;

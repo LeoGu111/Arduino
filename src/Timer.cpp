@@ -20,22 +20,19 @@ Time convertFromIndustrialHours(double industrialHours)
 void Timer_Main()
 {
 unsigned long currentMillis = millis(); // Aktuelle Zeit in Millisekunden
-if (currentMillis - previousMillis >= interval) 
-{
+
 if (Timer_1 > 0)
 {
-Timer_1 = Timer_1 - 1;
-previousMillis = currentMillis; // Speichere die aktuelle Zeit für den nächsten Durchlauf
+Timer_1 = Timer_1 - (float)(currentMillis - previousMillis)/1000;
 }
 if (Timer_2 > 0)
 {
-Timer_2 = Timer_2 - 1;
-previousMillis = currentMillis; // Speichere die aktuelle Zeit für den nächsten Durchlauf
+Timer_2 = Timer_2 - (float)(currentMillis - previousMillis)/1000;
 }
 if (Timer_3 > 0)
 {
-Timer_3 = Timer_3 - 1;
-previousMillis = currentMillis; // Speichere die aktuelle Zeit für den nächsten Durchlauf
+Timer_3 = Timer_3 - (float)(currentMillis - previousMillis)/1000;
 }
-}
+
+previousMillis = currentMillis;
 }
