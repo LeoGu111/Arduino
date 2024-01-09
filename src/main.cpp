@@ -71,9 +71,11 @@ Timer_Main();
 encoder_position();
 menue_Auswahl();
 Menue_Timer_Anzeige();
+speicher_Auswahl();
 Menue_Timer_Auswahl();
+
 Menue_Timer_Einstellen();
 
-  previousState = currentState;
+previousState = currentState;
 }
 

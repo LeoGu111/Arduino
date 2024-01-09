@@ -135,7 +135,6 @@ display.setCursor(center_function(convertFromIndustrialHours(Timer_2),12),22);
 display.printf("%d:%d:%d",convertFromIndustrialHours(Timer_2));
 display.setCursor(center_function(convertFromIndustrialHours(Timer_3),12),42);
 display.printf("%d:%d:%d",convertFromIndustrialHours(Timer_3));
-display.display();
 }
 // SubMenue wo die ersten uhrzeiten angezeigt werden /kommt nach dem bestätigen vom menue punkt "timer" im haupt menue
 void SubMenue_1_1(int X, float H_1, float H_2, float H_3) //X ist die Positon vom Curser für die auswahl
@@ -207,6 +206,7 @@ void Menue_Timer_Anzeige()
 if ((pos == 1 and PIN_SW_PF == 0 and SUB_ACTIVE == 0 and SUB_ACTIVE_2 == 0) or Menue_Timer_1)
 {
   Menue_Timer(Timer_1/3600,Timer_2/3600,Timer_3/3600);
+  display.display();
   if (PIN_SW_PF == 0 and Menue_Timer_1 == 1)
   {
   Menue_Timer_1 = 0;
@@ -221,15 +221,15 @@ if ((pos == 1 and PIN_SW_PF == 0 and SUB_ACTIVE == 0 and SUB_ACTIVE_2 == 0) or M
 
 void Menue_Timer_Auswahl()
 {
-    if ((pos == 2 and PIN_SW_PF == 0 and SUB_ACTIVE_2 == 0 and SUB_ACTIVE_3 == 0) or SUB_ACTIVE == 1){
+    if ((pos == 2 and PIN_SW_PF == 0 and SUB_ACTIVE_2 == 0 and SUB_ACTIVE_3 == 0 and Menue_Timer_1 == 0) or SUB_ACTIVE == 1){
     switch (pos) {
     case 0:
       SubMenue_1_1(0, floatArray[0], floatArray[1], floatArray[2]);
-      speicher_Auswahl(0);
+      Number = 0;
       break;
     case 1:
       SubMenue_1_1(20, floatArray[0], floatArray[1], floatArray[2]);
-      speicher_Auswahl(1);
+      Number = 1;
       break;
     case 2:
       if (digitalRead(PIN_SW) == 0 and SUB_ACTIVE == 0)
@@ -240,44 +240,44 @@ void Menue_Timer_Auswahl()
       else
       {
       SubMenue_1_1(40, floatArray[0], floatArray[1], floatArray[2]);
-      speicher_Auswahl(2);
+      Number = 2;
       }
       break;
     case 3:
       SubMenue_1_1(0, floatArray[3], floatArray[4], floatArray[5]);
-      speicher_Auswahl(3);
+      Number = 3;
       break;
     case 4:
       SubMenue_1_1(20, floatArray[3], floatArray[4], floatArray[5]);
-      speicher_Auswahl(4);
+      Number = 4;
       break;
     case 5:
       SubMenue_1_1(40,  floatArray[3], floatArray[4], floatArray[5]);
-      speicher_Auswahl(5);
+      Number = 5;
       break;
     case 6:
       SubMenue_1_1(0, floatArray[6], floatArray[7], floatArray[8]);
-      speicher_Auswahl(6);
+      Number = 6;
       break;
     case 7:
       SubMenue_1_1(20, floatArray[6], floatArray[7], floatArray[8]);
-      speicher_Auswahl(7);
+      Number = 7;
       break;
     case 8:
       SubMenue_1_1(40,floatArray[6], floatArray[7], floatArray[8]);
-      speicher_Auswahl(8);
+      Number = 8;
       break;
     case 9:
       SubMenue_1_1(0, floatArray[9], floatArray[10], floatArray[11]);
-      speicher_Auswahl(9);
+      Number = 9;
       break;
     case 10:
       SubMenue_1_1(20, floatArray[9], floatArray[10], floatArray[11]);
-      speicher_Auswahl(10);
+      Number = 10;
       break;
     case 11:
       SubMenue_1_1(40, floatArray[9], floatArray[10], floatArray[11]);
-      speicher_Auswahl(11);
+      Number = 11;
       break;
     case 12:
       display.clearDisplay();
@@ -305,11 +305,10 @@ void Menue_Timer_Auswahl()
 
 void Menue_Timer_Einstellen()
 {    
-if ((pos == 3 and PIN_SW_PF == 1 and SUB_ACTIVE == 0 and SUB_ACTIVE_3 == 0) or SUB_ACTIVE_2 == 1){
+if ((pos == 3 and PIN_SW_PF == 0 and SUB_ACTIVE == 0 and SUB_ACTIVE_3 == 0 and Menue_Timer_1 == 0) or SUB_ACTIVE_2 == 1){
     switch (pos) {
     case 0:
       SubMenue_1_1(0, floatArray[0], floatArray[1], floatArray[2]);
-      
       break;
     case 1:
       SubMenue_1_1(20, floatArray[0], floatArray[1], floatArray[2]);
@@ -384,46 +383,115 @@ if ((pos == 3 and PIN_SW_PF == 1 and SUB_ACTIVE == 0 and SUB_ACTIVE_3 == 0) or S
   }
 }
 
-void speicher_Auswahl(int Number)
+void speicher_Auswahl()
 {
-if(SUB_ACTIVE == 1 and SUB_ACTIVE_2 == 0 and Menue_Timer_1 == 0 and PIN_SW_PF == 0 or SUB_ACTIVE_3 == 1){
+if((SUB_ACTIVE == 1 and SUB_ACTIVE_2 == 0 and Menue_Timer_1 == 0 and PIN_SW_PF == 0) or SUB_ACTIVE_3 == 1){
+  SUB_ACTIVE = 0;
+  if (pos < 0) 
+  {
+  pos = -1;
+  } 
+  else if (pos > 2) 
+  {
+  pos = 2;
+  }
     switch (pos) {
       case 0:
-        Menue_Timer(Timer_1, Timer_2, Timer_3);
+        Menue_Timer(Timer_1/3600, Timer_2/3600, Timer_3/3600);
         display.drawRect(0, 0, 128, 19, WHITE);
         display.display();
         if (PIN_SW_PF == 0 and SUB_ACTIVE_3 == 1)
         {
-          Timer_1 = floatArray[Number] * 3600;
+          Timer_1 = floatArray[Number] * 3600.0;
+          SUB_ACTIVE_3 = 0;
           Menue_Timer_1 = 1;
-          SUB_ACTIVE = 0;
+          break;
         }
+        SUB_ACTIVE_3 = 1;  
         break;
       case 1:
-        Menue_Timer(Timer_1, Timer_2, Timer_3);
-        display.drawRect(0, 0, 128, 19, WHITE);
+        Menue_Timer(Timer_1/3600, Timer_2/3600, Timer_3/3600);
+        display.drawRect(0, 20, 128, 19, WHITE);
         display.display();
         if (PIN_SW_PF == 0 and SUB_ACTIVE_3 == 1)
         {
-          Timer_2 = floatArray[Number] * 3600;
+          Timer_2 = floatArray[Number] * 3600.0;
+          SUB_ACTIVE_3 = 0;
           Menue_Timer_1 = 1;
-          SUB_ACTIVE = 0;
+          break;
         }
+        SUB_ACTIVE_3 = 1;  
         break;
       case 2:
-        Menue_Timer(Timer_1, Timer_2, Timer_3);
+        Menue_Timer(Timer_1/3600, Timer_2/3600, Timer_3/3600);
+        display.drawRect(0, 40, 128, 19, WHITE);
+        display.display();
+        if (PIN_SW_PF == 0 and SUB_ACTIVE_3 == 1)
+        {
+          Timer_3 = floatArray[Number] * 3600.0;
+          SUB_ACTIVE_3 = 0;
+          Menue_Timer_1 = 1;
+          break;
+        }
+        SUB_ACTIVE_3 = 1;  
+        break;
+      default:
+        break;
+}
+}
+}
+
+void Timer_Einstellen()
+{
+if((SUB_ACTIVE == 1 and SUB_ACTIVE_2 == 0 and Menue_Timer_1 == 0 and PIN_SW_PF == 0) or SUB_ACTIVE_3 == 1){
+  SUB_ACTIVE = 0;
+    switch (pos) {
+      case 0:
+        Menue_Timer(Timer_1/3600, Timer_2/3600, Timer_3/3600);
         display.drawRect(0, 0, 128, 19, WHITE);
         display.display();
         if (PIN_SW_PF == 0 and SUB_ACTIVE_3 == 1)
         {
-          Timer_3 = floatArray[Number] * 3600;
+          Timer_1 = floatArray[Number] * 3600.0;
+          SUB_ACTIVE_3 = 0;
           Menue_Timer_1 = 1;
-          SUB_ACTIVE = 0;
+          break;
         }
+        SUB_ACTIVE_3 = 1;  
         break;
-        default:
+      case 1:
+        Menue_Timer(Timer_1/3600, Timer_2/3600, Timer_3/3600);
+        display.drawRect(0, 20, 128, 19, WHITE);
+        display.display();
+        if (PIN_SW_PF == 0 and SUB_ACTIVE_3 == 1)
+        {
+          Timer_2 = floatArray[Number] * 3600.0;
+          SUB_ACTIVE_3 = 0;
+          Menue_Timer_1 = 1;
+          break;
+        }
+        SUB_ACTIVE_3 = 1;  
         break;
-    SUB_ACTIVE_3 = 1;
+      case 2:
+        Menue_Timer(Timer_1/3600, Timer_2/3600, Timer_3/3600);
+        display.drawRect(0, 40, 128, 19, WHITE);
+        display.display();
+        if (PIN_SW_PF == 0 and SUB_ACTIVE_3 == 1)
+        {
+          Timer_3 = floatArray[Number] * 3600.0;
+          SUB_ACTIVE_3 = 0;
+          Menue_Timer_1 = 1;
+          break;
+        }
+        SUB_ACTIVE_3 = 1;  
+        break;
+      default:
+        break;
 }
 }
 }
+
+
+
+
+

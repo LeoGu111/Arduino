@@ -60,7 +60,8 @@ void menue_Auswahl();
 void Menue_Timer_Anzeige();
 void Menue_Timer_Auswahl();
 void Menue_Timer_Einstellen();
-void speicher_Auswahl(int Number);
+void speicher_Auswahl();
+void Timer_Einstellen();
 
 extern float floatArray[12];
 extern bool countdownStarted ;
