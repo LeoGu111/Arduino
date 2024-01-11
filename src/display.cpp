@@ -165,7 +165,7 @@ int digitCount_M = (convertedTime.minutes != 0) ? ((int)log10(abs(convertedTime.
 int digitCount_S = (convertedTime.seconds != 0) ? ((int)log10(abs(convertedTime.seconds)) + 1) : 1;
 
 //+2 * X wegen den : bei der Zahlen trennung
-
+   
 int versatz_1 = 64 - ((digitCount_H * X + digitCount_M * X + digitCount_S * X + 2 * X)/2);
 
 return abs(versatz_1);
@@ -176,7 +176,15 @@ void menue_Auswahl()
 if(SUB_ACTIVE == 0 and SUB_ACTIVE_2 == 0 and Menue_Timer_1 == 0 and SUB_ACTIVE_3 == 0){
     switch (pos) {
       case 0:
-        HomeBildschirm();
+        display.clearDisplay();
+        display.setTextSize(2);
+        display.setCursor(16,0);
+        display.println("Espresso");
+        display.setCursor(7,20);
+        display.println("countinue");
+        display.setCursor(58,40);
+        display.println("V");
+        display.display();
         break;
       case 1:
         HomeBildschirm();
@@ -190,14 +198,15 @@ if(SUB_ACTIVE == 0 and SUB_ACTIVE_2 == 0 and Menue_Timer_1 == 0 and SUB_ACTIVE_3
       case 4:
         Menue_1(40);
         break;
-      default:
+      }
+
       if (pos < 0) {
         encoder.setCount(0);
       } else if (pos > 4) {
         encoder.setCount(4);
       }
-      break;
-    }
+
+    
   }
 }
 
@@ -221,8 +230,18 @@ if ((pos == 1 and PIN_SW_PF == 0 and SUB_ACTIVE == 0 and SUB_ACTIVE_2 == 0) or M
 
 void Menue_Timer_Auswahl()
 {
-    if ((pos == 2 and PIN_SW_PF == 0 and SUB_ACTIVE_2 == 0 and SUB_ACTIVE_3 == 0 and Menue_Timer_1 == 0) or SUB_ACTIVE == 1){
-    switch (pos) {
+if ((pos == 2 and PIN_SW_PF == 0 and SUB_ACTIVE_2 == 0 and SUB_ACTIVE_3 == 0 and Menue_Timer_1 == 0) or SUB_ACTIVE == 1){
+    
+      if (pos < 0) {
+      encoder.setCount(0);
+    } else if (pos > anzahl_timer + 1) {
+      encoder.setCount(anzahl_timer + 1);
+      pos = anzahl_timer + 1;
+      Serial.print("to High");
+    }
+    Serial.print(pos);
+
+  switch (pos) {
     case 0:
       SubMenue_1_1(0, floatArray[0], floatArray[1], floatArray[2]);
       Number = 0;
@@ -292,74 +311,82 @@ void Menue_Timer_Auswahl()
         delay(500);
       }
        break;
-    default:
-        if (pos < 0) {
-          encoder.setCount(0);
-        } else if (pos > 12) {
-          encoder.setCount(12);
-        }
-      break;
     }
+    
+    if (pos < 0) {
+      encoder.setCount(0);
+    } else if (pos > anzahl_timer) {
+      encoder.setCount(anzahl_timer);
+    } 
   }
  }
 
 void Menue_Timer_Einstellen()
 {    
-if ((pos == 3 and PIN_SW_PF == 0 and SUB_ACTIVE == 0 and SUB_ACTIVE_3 == 0 and Menue_Timer_1 == 0) or SUB_ACTIVE_2 == 1){
+if ((pos == 3 and PIN_SW_PF == 0 and SUB_ACTIVE == 0 and SUB_ACTIVE_3 == 0 and Menue_Timer_1 == 0 and pos < anzahl_timer + 1) or SUB_ACTIVE_2 == 1){
+  
+
     switch (pos) {
     case 0:
       SubMenue_1_1(0, floatArray[0], floatArray[1], floatArray[2]);
+      Number = 0;
       break;
     case 1:
       SubMenue_1_1(20, floatArray[0], floatArray[1], floatArray[2]);
-      
+      Number = 1;
       break;
     case 2:
-      SubMenue_1_1(40, floatArray[3], floatArray[4], floatArray[5]);
+      SubMenue_1_1(40, floatArray[0], floatArray[1], floatArray[2]);
+      Number = 2;
       break;
     case 3:
-        SUB_ACTIVE_2 = 1;
-         if (digitalRead(PIN_SW) == 0)
+         if (digitalRead(PIN_SW) == 0 and SUB_ACTIVE_2 == 0)
          {
-          encoder.setCount(-1);
+          SUB_ACTIVE_2 = 1;
+          pos = -1;
          }
          else
          {
-         SubMenue_1_1(0, floatArray[0], floatArray[1], floatArray[2]);
+          SubMenue_1_1(0, floatArray[3], floatArray[4], floatArray[5]);
+          Number = 3;
+          break;
          }
-      break;
+      
     case 4:
       SubMenue_1_1(20, floatArray[3], floatArray[4], floatArray[5]);
-       
+      Number = 4;
+
       break;
     case 5:
       SubMenue_1_1(40,  floatArray[3], floatArray[4], floatArray[5]);
-       
+      Number = 5;
       break;
     case 6:
       SubMenue_1_1(0, floatArray[6], floatArray[7], floatArray[8]);
-      
+      Number = 6;
+      Timer_Einstellen();
       break;
     case 7:
       SubMenue_1_1(20, floatArray[6], floatArray[7], floatArray[8]);
-       
+      Number = 7;
       break;
     case 8:
       SubMenue_1_1(40,floatArray[6], floatArray[7], floatArray[8]);
-       
+      Number = 8;
       break;
     case 9:
       SubMenue_1_1(0, floatArray[9], floatArray[10], floatArray[11]);
-       
+      Number = 9;
       break;
     case 10:
       SubMenue_1_1(20, floatArray[9], floatArray[10], floatArray[11]);
-       
+      Number = 10;
       break;
     case 11:
       SubMenue_1_1(40, floatArray[9], floatArray[10], floatArray[11]);
+      Number = 11;
       break;
-    case 12:
+    default:
       display.clearDisplay();
       display.setCursor(40,2);
       display.printf("back");
@@ -367,25 +394,25 @@ if ((pos == 3 and PIN_SW_PF == 0 and SUB_ACTIVE == 0 and SUB_ACTIVE_3 == 0 and M
       display.display();
       if(digitalRead(PIN_SW) == 0)
       {
-        pos = 1;
         SUB_ACTIVE_2 = 0;
+        pos = 1;
         delay(500);
       }
        break;
-    default:
-        if (pos < 0) {
-          encoder.setCount(0);
-        } else if (pos > 12) {
-          encoder.setCount(12);
-        }
-      break;
-  }
+    }
+    if (pos < 0) {
+      encoder.setCount(0);
+    }
+    else if (pos > anzahl_timer) 
+    {
+      encoder.setCount(anzahl_timer);
+    }  
   }
 }
 
 void speicher_Auswahl()
 {
-if((SUB_ACTIVE == 1 and SUB_ACTIVE_2 == 0 and Menue_Timer_1 == 0 and PIN_SW_PF == 0) or SUB_ACTIVE_3 == 1){
+if((SUB_ACTIVE == 1 and SUB_ACTIVE_2 == 0 and Menue_Timer_1 == 0 and PIN_SW_PF == 0 and pos < anzahl_timer)  or SUB_ACTIVE_3 == 1){
   SUB_ACTIVE = 0;
   if (pos < 0) 
   {
@@ -443,51 +470,82 @@ if((SUB_ACTIVE == 1 and SUB_ACTIVE_2 == 0 and Menue_Timer_1 == 0 and PIN_SW_PF =
 
 void Timer_Einstellen()
 {
-if((SUB_ACTIVE == 0 and SUB_ACTIVE_2 == 1 and Menue_Timer_1 == 0 and PIN_SW_PF == 0) or SUB_ACTIVE_3 == 1){
-while (true)
-{
+if((SUB_ACTIVE == 0 and SUB_ACTIVE_2 == 1 and Menue_Timer_1 == 0 and PIN_SW_PF == 0  and pos < anzahl_timer)){
 int i = 0;
 int H = 0;
 int M = 0;
 int S = 0;
-double Zeit = 0;
+double long Zeit = 0;
+
+
+while (true)
+{
+
+bool state = digitalRead(PIN_SW);
+PIN_SW_PF = HIGH;
+if (state == LOW && previousState == HIGH) 
+{
+PIN_SW_PF = LOW;
+}
+encoder_position();
+
+
 if (PIN_SW_PF == 0)
 {
   i++;
 }
 else if (i > 3)
 {
+  pos = Number - 1;
+  floatArray[Number] = Zeit/3600;
   break;
 }
 
 
 switch (i)
 {
-case 0:
+case 1:
+  if (H < pos)
+  { 
+  Zeit = Zeit + 3600;
+  }
+  else if (H > pos)
+  {
+  Zeit = Zeit - 3600;
+  }
   H = pos;
   break;
-case 1:
+case 2:
+  if (M < pos)
+  { 
+  Zeit = Zeit + 60;
+  }
+  else if (M > pos)
+  {
+  Zeit = Zeit - 60;
+  }
   M = pos;
   break;
-case 2:
+case 3:
+  if ( S < pos)
+  { 
+  Zeit = Zeit + 1;
+  }
+  else if (S > pos)
+  {
+  Zeit = Zeit - 1;
+  }
   S = pos;
   break;
 }
 
-Zeit = Zeit + H * 3600;
-Zeit = Zeit + M * 60;
-Zeit = Zeit + S;
-
 display.clearDisplay();
-display.setCursor(center_function(convertFromIndustrialHours(Zeit),12),22);
-display.printf("%d:%d:%d",convertFromIndustrialHours(Zeit));
+display.setCursor(center_function(convertFromIndustrialHours(Zeit/3600),12),22);
+display.printf("%d:%d:%d",convertFromIndustrialHours(Zeit/3600));
 display.display();
+
+previousState = state;
 }
-
-floatArray[pos];
-
-
-
 }
 }
 

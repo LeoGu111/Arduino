@@ -14,6 +14,7 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 #include <RTClib.h>
+#include <Adafruit_NeoPixel.h>
 
 
 //-------------------------------------------------------------------------------
@@ -32,6 +33,9 @@
 #define PIN_DT 35
 #define PIN_CLK 34
 #define PIN_SW 32
+
+#define LED_PIN 25
+#define LED_COUNT 8
 
 struct Time_1 {
     int hours;
@@ -77,6 +81,6 @@ extern RTC_DS3231 rtc;
 extern ESP32Encoder encoder;
 extern char daysOfTheWeek[7][12];
 extern bool PIN_SW_PF;
-
+extern int anzahl_timer;
 
 #endif

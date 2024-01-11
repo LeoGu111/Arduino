@@ -8,6 +8,7 @@ const unsigned long interval = 1000; // Intervall in Millisekunden (hier 1 Sekun
 int Number = 1;
 int pos = 0;
 float floatArray[12] = {1.2f, 3.4f, 5.6f, 7.8f, 9.0f, 11.1f, 13.2f, 15.3f, 17.4f, 19.5f, 20.0f, 20.5f};
+int anzahl_timer = sizeof(floatArray)/sizeof(floatArray[0]);
 bool countdownStarted = false;
 bool Menue_Timer_1 = 0;
 bool SUB_ACTIVE = 0;
@@ -18,6 +19,14 @@ unsigned long lastDebounceTime = 0; // Initialize the last debounce time
 int lastPosition = 0; // Initialize the last position
 const int debounceDelay = 50; // Debounce delay in milliseconds
 bool PIN_SW_PF = HIGH;
+long shortestTimer = 0;
+long Neuer_shortest_Timer = 0;
+bool timer_neu_Ausgewaehlt = 0;
+void updateLEDsBasedOnShortestTimer();
+void findshortestTimer();
+
+
+Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_RGB + NEO_KHZ800);
 
 //Display Setup-----------------------------------------------------------------------------------------------------
 
@@ -62,20 +71,74 @@ int currentState = digitalRead(PIN_SW);
 PIN_SW_PF = HIGH;
 if (currentState == LOW && previousState == HIGH) 
 {
-PIN_SW_PF = LOW;
+    PIN_SW_PF = LOW;
 }
 
 
-
 Timer_Main();
+
+findshortestTimer();
+updateLEDsBasedOnShortestTimer();
+
 encoder_position();
 menue_Auswahl();
 Menue_Timer_Anzeige();
+
 speicher_Auswahl();
 Menue_Timer_Auswahl();
 
+Timer_Einstellen();
 Menue_Timer_Einstellen();
 
+if (shortestTimer != (Timer_1 or Timer_2 or Timer_3))
+{
+    timer_neu_Ausgewaehlt = 1;
+}
+else
+{
+    timer_neu_Ausgewaehlt = 0;
+}
+
+
 previousState = currentState;
+}
+
+//NeoPixel Anzeige----------------------------------------------------------------------
+void findshortestTimer() {
+    shortestTimer = Timer_1; // Annahme: Timer_1 ist am Anfang der kürzeste Timer
+    if (timer_neu_Ausgewaehlt == 1)
+    {
+        Neuer_shortest_Timer = Timer_1;
+    }
+
+    if (Timer_2 > 0 && Timer_2 < shortestTimer) {
+        shortestTimer = Timer_2;
+        if (timer_neu_Ausgewaehlt == 1)
+        {
+            Neuer_shortest_Timer = Timer_2;
+        }
+        
+    }
+
+    if (Timer_3 > 0 && Timer_3 < shortestTimer) {
+        shortestTimer = Timer_3;
+        if (timer_neu_Ausgewaehlt == 1)
+        {
+            Neuer_shortest_Timer = Timer_3;
+        }
+    }
+}
+
+void updateLEDsBasedOnShortestTimer() {
+  int ledsToShow = map(shortestTimer, 0, Neuer_shortest_Timer, 0, LED_COUNT);
+  
+  for (int i = 0; i < LED_COUNT; i++) {
+    if (i < ledsToShow) {
+      strip.setPixelColor(i, strip.Color(0, 255, 0)); // Grün für abgelaufene Zeit
+    } else {
+      strip.setPixelColor(i, strip.Color(0, 0, 0)); // Aus für verbleibende Zeit
+    }
+  }
+  strip.show();
 }
 

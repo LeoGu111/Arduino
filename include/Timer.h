@@ -28,7 +28,7 @@ struct Time {
 
 //-------------------------------------------------------------------------------
 
-Time convertFromIndustrialHours(double industrialHours);
+Time convertFromIndustrialHours(double long industrialHours);
 void Timer_Main();
 
 extern long double Timer_1;
