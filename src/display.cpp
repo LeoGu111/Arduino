@@ -178,8 +178,8 @@ if(SUB_ACTIVE == 0 and SUB_ACTIVE_2 == 0 and Menue_Timer_1 == 0 and SUB_ACTIVE_3
       case 0:
         display.clearDisplay();
         display.setTextSize(2);
-        display.setCursor(16,0);
-        display.println("Espresso");
+        display.setCursor(10,0);
+        display.println("Esp-resso");
         display.setCursor(7,20);
         display.println("countinue");
         display.setCursor(58,40);
@@ -214,7 +214,7 @@ void Menue_Timer_Anzeige()
 {
 if ((pos == 1 and PIN_SW_PF == 0 and SUB_ACTIVE == 0 and SUB_ACTIVE_2 == 0) or Menue_Timer_1)
 {
-  Menue_Timer(Timer_1/3600,Timer_2/3600,Timer_3/3600);
+  Menue_Timer(Timer_1,Timer_2,Timer_3);
   display.display();
   if (PIN_SW_PF == 0 and Menue_Timer_1 == 1)
   {
@@ -344,6 +344,7 @@ if ((pos == 3 and PIN_SW_PF == 0 and SUB_ACTIVE == 0 and SUB_ACTIVE_3 == 0 and M
          {
           SUB_ACTIVE_2 = 1;
           pos = -1;
+          break;
          }
          else
          {
@@ -355,7 +356,6 @@ if ((pos == 3 and PIN_SW_PF == 0 and SUB_ACTIVE == 0 and SUB_ACTIVE_3 == 0 and M
     case 4:
       SubMenue_1_1(20, floatArray[3], floatArray[4], floatArray[5]);
       Number = 4;
-
       break;
     case 5:
       SubMenue_1_1(40,  floatArray[3], floatArray[4], floatArray[5]);
@@ -364,7 +364,6 @@ if ((pos == 3 and PIN_SW_PF == 0 and SUB_ACTIVE == 0 and SUB_ACTIVE_3 == 0 and M
     case 6:
       SubMenue_1_1(0, floatArray[6], floatArray[7], floatArray[8]);
       Number = 6;
-      Timer_Einstellen();
       break;
     case 7:
       SubMenue_1_1(20, floatArray[6], floatArray[7], floatArray[8]);
@@ -386,7 +385,7 @@ if ((pos == 3 and PIN_SW_PF == 0 and SUB_ACTIVE == 0 and SUB_ACTIVE_3 == 0 and M
       SubMenue_1_1(40, floatArray[9], floatArray[10], floatArray[11]);
       Number = 11;
       break;
-    default:
+    case 12:
       display.clearDisplay();
       display.setCursor(40,2);
       display.printf("back");
@@ -414,6 +413,7 @@ void speicher_Auswahl()
 {
 if((SUB_ACTIVE == 1 and SUB_ACTIVE_2 == 0 and Menue_Timer_1 == 0 and PIN_SW_PF == 0 and pos < anzahl_timer)  or SUB_ACTIVE_3 == 1){
   SUB_ACTIVE = 0;
+
   if (pos < 0) 
   {
   pos = -1;
@@ -424,12 +424,12 @@ if((SUB_ACTIVE == 1 and SUB_ACTIVE_2 == 0 and Menue_Timer_1 == 0 and PIN_SW_PF =
   }
     switch (pos) {
       case 0:
-        Menue_Timer(Timer_1/3600, Timer_2/3600, Timer_3/3600);
+        Menue_Timer(Timer_1, Timer_2, Timer_3);
         display.drawRect(0, 0, 128, 19, WHITE);
         display.display();
         if (PIN_SW_PF == 0 and SUB_ACTIVE_3 == 1)
         {
-          Timer_1 = floatArray[Number] * 3600.0;
+          Timer_1 = floatArray[Number];
           SUB_ACTIVE_3 = 0;
           Menue_Timer_1 = 1;
           break;
@@ -437,12 +437,12 @@ if((SUB_ACTIVE == 1 and SUB_ACTIVE_2 == 0 and Menue_Timer_1 == 0 and PIN_SW_PF =
         SUB_ACTIVE_3 = 1;  
         break;
       case 1:
-        Menue_Timer(Timer_1/3600, Timer_2/3600, Timer_3/3600);
+        Menue_Timer(Timer_1, Timer_2, Timer_3);
         display.drawRect(0, 20, 128, 19, WHITE);
         display.display();
         if (PIN_SW_PF == 0 and SUB_ACTIVE_3 == 1)
         {
-          Timer_2 = floatArray[Number] * 3600.0;
+          Timer_2 = floatArray[Number];
           SUB_ACTIVE_3 = 0;
           Menue_Timer_1 = 1;
           break;
@@ -450,12 +450,12 @@ if((SUB_ACTIVE == 1 and SUB_ACTIVE_2 == 0 and Menue_Timer_1 == 0 and PIN_SW_PF =
         SUB_ACTIVE_3 = 1;  
         break;
       case 2:
-        Menue_Timer(Timer_1/3600, Timer_2/3600, Timer_3/3600);
+        Menue_Timer(Timer_1, Timer_2, Timer_3);
         display.drawRect(0, 40, 128, 19, WHITE);
         display.display();
         if (PIN_SW_PF == 0 and SUB_ACTIVE_3 == 1)
         {
-          Timer_3 = floatArray[Number] * 3600.0;
+          Timer_3 = floatArray[Number];
           SUB_ACTIVE_3 = 0;
           Menue_Timer_1 = 1;
           break;
@@ -483,22 +483,29 @@ while (true)
 
 bool state = digitalRead(PIN_SW);
 PIN_SW_PF = HIGH;
+
 if (state == LOW && previousState == HIGH) 
 {
 PIN_SW_PF = LOW;
 }
-encoder_position();
-
 
 if (PIN_SW_PF == 0)
 {
   i++;
+  pos = -1;
 }
 else if (i > 3)
 {
   pos = Number - 2;
-  floatArray[Number] = Zeit/3600;
+  floatArray[Number] = Zeit;
   break;
+}
+
+encoder_position();
+
+if (pos < 0)
+{
+pos = -1;
 }
 
 
@@ -516,22 +523,22 @@ case 1:
   H = pos;
   break;
 case 2:
-  if (M < pos)
+  if (M < pos and 0 < pos)
   { 
   Zeit = Zeit + 60;
   }
-  else if (M > pos)
+  else if (M > pos and 0 < pos)
   {
   Zeit = Zeit - 60;
   }
   M = pos;
   break;
 case 3:
-  if ( S < pos)
+  if (S < pos and 0 < pos)
   { 
   Zeit = Zeit + 1;
   }
-  else if (S > pos)
+  else if (S > pos and 0 < pos)
   {
   Zeit = Zeit - 1;
   }
@@ -540,8 +547,8 @@ case 3:
 }
 
 display.clearDisplay();
-display.setCursor(center_function(convertFromIndustrialHours(Zeit/3600),12),22);
-display.printf("%d:%d:%d",convertFromIndustrialHours(Zeit/3600));
+display.setCursor(center_function(convertFromIndustrialHours(Zeit),12),22);
+display.printf("%d:%d:%d",convertFromIndustrialHours(Zeit));
 display.display();
 
 previousState = state;

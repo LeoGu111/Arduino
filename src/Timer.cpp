@@ -1,25 +1,25 @@
 #include <Timer.h>
 
+Time convertFromIndustrialHours(long double totalSeconds) {
+    Time result;
 
+    // Convert totalSeconds to integer before applying modulus
+    int totalSecondsInt = static_cast<int>(totalSeconds);
 
-
-Time convertFromIndustrialHours(double long industrialHours) 
-{
-    int hours = static_cast<int>(industrialHours); // Extrahiere die ganzen Stunden
-    double fractionalPart = industrialHours - hours; // Der Dezimalteil entspricht den Minuten und Sekunden
-
-    int minutes = static_cast<int>(fractionalPart * 60); // Umwandlung des Dezimalteils in Minuten
-    double fractionalMinutes = (fractionalPart * 60) - minutes; // Der Dezimalteil entspricht den Sekunden
-    //if (static_cast<double>(fractionalMinutes * 60) > 59)
-    //{
-    //static_cast<double>(fractionalMinutes * 60) + 1;
-    //}
-    //else
-    //{
-    int seconds = static_cast<double>(fractionalMinutes * 60); // Umwandlung des Dezimalteils in Sekunden
-    //}
-
-    Time result { hours, minutes, seconds };
+    result.hours = totalSecondsInt / 3600;         // 1 hour has 3600 seconds
+    result.minutes = (totalSecondsInt % 3600) / 60; // Convert remaining seconds to minutes
+    result.seconds = totalSecondsInt % 60;          // Remaining seconds
+    if (result.hours < 0)
+    {
+        result.hours = 0;
+    }else if (result.minutes < 0)
+    {
+        result.minutes = 0;
+    }else if (result.seconds < 0 )
+    {
+        result.seconds = 0;
+    }
+    
     return result;
 }
 
@@ -29,15 +29,15 @@ unsigned long currentMillis = millis(); // Aktuelle Zeit in Millisekunden
 
 if (Timer_1 > 0)
 {
-Timer_1 = Timer_1 - (float)(currentMillis - previousMillis)/1000;
+Timer_1 = Timer_1 - (long double)(currentMillis - previousMillis)/1000;
 }
 if (Timer_2 > 0)
 {
-Timer_2 = Timer_2 - (float)(currentMillis - previousMillis)/1000;
+Timer_2 = Timer_2 - (long double)(currentMillis - previousMillis)/1000;
 }
 if (Timer_3 > 0)
 {
-Timer_3 = Timer_3 - (float)(currentMillis - previousMillis)/1000;
+Timer_3 = Timer_3 - (long double)(currentMillis - previousMillis)/1000;
 }
 
 previousMillis = currentMillis;
