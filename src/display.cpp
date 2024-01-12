@@ -496,7 +496,7 @@ if (PIN_SW_PF == 0)
 }
 else if (i > 3)
 {
-  pos = Number - 1;
+  pos = Number - 2;
   floatArray[Number] = Zeit/3600;
   break;
 }
