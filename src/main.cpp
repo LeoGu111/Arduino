@@ -1,8 +1,13 @@
 #include <display.h>
+#include <wlan.h>
+#include "webserver.h"
+#include <ESPAsyncWebServer.h>
 
 #define PIN_Timer_1 13
 #define PIN_Timer_2 12
 #define PIN_Timer_3 14
+
+AsyncWebServer server(80);
 
 double long Timer_1 = 0;
 double long Timer_2 = 0;
@@ -11,7 +16,7 @@ unsigned long previousMillis = 0;    // Variable zum Speichern der letzten Zeitm
 const unsigned long interval = 1000; // Intervall in Millisekunden (hier 1 Sekunde)
 int Number = 1;
 int pos = 0;
-float floatArray[12] = {60, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 3600, 7200};
+double long floatArray[12] = {60, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 3600, 7200};
 int anzahl_timer = sizeof(floatArray) / sizeof(floatArray[0]);
 bool countdownStarted = false;
 bool Menue_Timer_1 = 0;
@@ -26,6 +31,7 @@ bool PIN_SW_PF = HIGH;
 double long shortestTimer = 0;
 double long Neuer_shortest_Timer = 0;
 bool timer_neu_Ausgewaehlt = 0;
+
 void updateLEDsBasedOnShortestTimer();
 void findshortestTimer();
 
@@ -45,6 +51,7 @@ char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursd
 ESP32Encoder encoder;
 
 //------------------------------------------------------------------------------------------------------------------
+
 
 void setup()
 {
@@ -70,6 +77,19 @@ void setup()
     pinMode(PIN_Timer_3, INPUT_PULLDOWN);
 
     Setup_Encoder();
+    connectToWiFi();
+  // Route to handle requests and provide HTML page with array values
+  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
+    String html = "<html><body><h1>Array values:</h1><ul>";
+    for (size_t i = 0; i < sizeof(floatArray) / sizeof(floatArray[0]); i++) {
+      html += "<li>" + String((long)floatArray[i]) + "</li>";
+    }
+    html += "</ul></body></html>";
+    request->send(200, "text/html", html);
+  });
+
+  // Start server
+  server.begin();
     display_Start_sequenz();
     // rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
 }
@@ -186,3 +206,4 @@ void updateLEDsBasedOnShortestTimer()
     }
     strip.show();
 }
+

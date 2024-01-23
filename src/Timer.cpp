@@ -1,5 +1,4 @@
 #include <Timer.h>
-
 Time convertFromIndustrialHours(long double totalSeconds)
 {
     Time result;

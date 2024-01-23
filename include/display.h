@@ -66,7 +66,7 @@ void Menue_Timer_Einstellen();
 void speicher_Auswahl();
 void Timer_Einstellen();
 
-extern float floatArray[12];
+extern double long floatArray[12];
 extern bool countdownStarted;
 extern bool Menue_Timer_1;
 extern bool SUB_ACTIVE;

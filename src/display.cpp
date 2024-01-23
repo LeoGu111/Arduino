@@ -478,7 +478,7 @@ void speicher_Auswahl()
         encoder.setCount(0);
       }
     }
-  }
+  } 
 }
 
 void Timer_Einstellen()

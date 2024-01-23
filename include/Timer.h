@@ -23,6 +23,9 @@ struct Time
     int seconds;
 };
 
+//    bool aktiv = false;
+//    double long maxWert;
+
 //-------------------------------------------------------------------------------
 
 //  #function defines
