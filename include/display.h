@@ -16,16 +16,15 @@
 #include <RTClib.h>
 #include <Adafruit_NeoPixel.h>
 
-
 //-------------------------------------------------------------------------------
 
 //  #defines
 
 //-------------------------------------------------------------------------------
 
-#define SCREEN_WIDTH 128  // OLED display width, in pixels
-#define SCREEN_HEIGHT 64  // OLED display height, in pixels
-#define OLED_RESET    -1  // Reset pin # (or -1 if sharing reset pin)
+#define SCREEN_WIDTH 128 // OLED display width, in pixels
+#define SCREEN_HEIGHT 64 // OLED display height, in pixels
+#define OLED_RESET -1    // Reset pin # (or -1 if sharing reset pin)
 #define Menue_eintrag_1 "Timer"
 #define Menue_eintrag_2 "Ind. Timer"
 #define Menue_eintrag_3 "Settings"
@@ -37,7 +36,8 @@
 #define LED_PIN 25
 #define LED_COUNT 8
 
-struct Time_1 {
+struct Time_1
+{
     int hours;
     int minutes;
     int seconds;
@@ -49,7 +49,6 @@ struct Time_1 {
 
 //-------------------------------------------------------------------------------
 
-
 void display_starting_screen();
 void display_starting_screen_1();
 void display_Start_sequenz();
@@ -58,7 +57,7 @@ void display_draw_date(DateTime now);
 void display_draw_time(DateTime now);
 void Menue_1(int X); // = Box kordinaten 0, 22, 40
 void SubMenue_1_1(int X, float H_1, float H_2, float H_3);
-int center_function(Time industrie,int X);
+int center_function(Time industrie, int X);
 void Menue_Timer(double Timer_1, double Timer_2, double Timer_3);
 void menue_Auswahl();
 void Menue_Timer_Anzeige();
@@ -68,7 +67,7 @@ void speicher_Auswahl();
 void Timer_Einstellen();
 
 extern float floatArray[12];
-extern bool countdownStarted ;
+extern bool countdownStarted;
 extern bool Menue_Timer_1;
 extern bool SUB_ACTIVE;
 extern bool SUB_ACTIVE_2;

@@ -2,7 +2,7 @@
 
 void Setup_Encoder()
 {
-pinMode(PIN_SW, INPUT);
+  pinMode(PIN_SW, INPUT);
 
   // Konfiguriere die Pins für den Encoder
   ESP32Encoder::useInternalWeakPullResistors = UP;
@@ -11,38 +11,39 @@ pinMode(PIN_SW, INPUT);
 
 void encoder_position()
 {
-// Lese die aktuelle Position des Encoders
-int rawPosition = encoder.getCount(); 
-bool x = debounceEncoder(rawPosition, pos);
-if (x == 1)
+  // Lese die aktuelle Position des Encoders
+  int rawPosition = encoder.getCount();
+  bool x = debounceEncoder(rawPosition, pos);
+  if (x == 1)
+  {
+    if (pos < rawPosition)
+    {
+      pos = pos + 1;
+    }
+    else
+    {
+      pos = pos - 1;
+    }
+    encoder.setCount(pos);
+  }
+}
+
+bool debounceEncoder(int rawPosition, int lastPosition)
 {
-  if(pos<rawPosition)
+
+  unsigned long currentTime = millis();
+
+  if (rawPosition == lastPosition)
   {
-    pos = pos + 1;
+    lastDebounceTime = currentTime;
   }
-  else 
+
+  if (currentTime - lastDebounceTime > debounceDelay)
   {
-    pos = pos - 1;
+    return true; // Successfully updated debounced position
   }
-  encoder.setCount(pos);
+  else
+  {
+    return false; // No update of debounced position
+  }
 }
-}
-
-bool debounceEncoder(int rawPosition, int lastPosition) {
-
-    unsigned long currentTime = millis();
-
-    if (rawPosition == lastPosition) {
-        lastDebounceTime = currentTime;
-    }
-
-    if (currentTime - lastDebounceTime > debounceDelay) {
-        return true; // Successfully updated debounced position
-    } else {
-        return false; // No update of debounced position
-    }
-
- 
-}
-
-

@@ -16,7 +16,8 @@
 
 //-------------------------------------------------------------------------------
 
-struct Time {
+struct Time
+{
     int hours;
     int minutes;
     int seconds;
@@ -37,7 +38,5 @@ extern long double Timer_3;
 
 extern unsigned long previousMillis; // Variable zum Speichern der letzten Zeitmessung
 extern const unsigned long interval; // Intervall in Millisekunden (hier 1 Sekunde)
-
-
 
 #endif
