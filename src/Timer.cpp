@@ -1,5 +1,7 @@
 #include <Timer.h>
-Time convertFromIndustrialHours(long double totalSeconds)
+
+// convertiert sekunden zu stunden minuten und sekunden
+Time convert_to_HMS(long double totalSeconds)
 {
     Time result;
 
@@ -24,7 +26,7 @@ Time convertFromIndustrialHours(long double totalSeconds)
 
     return result;
 }
-
+// Zeiht die zyklus zeit vom Timer ab
 void Timer_Main()
 {
     unsigned long currentMillis = millis(); // Aktuelle Zeit in Millisekunden

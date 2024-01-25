@@ -1,9 +1,6 @@
-#include <WiFi.h>
 #include "wlan.h"
 
-const char *ssid = "iPhone von Leo";
-const char *password = "Schule2023";
-
+// versucht sich im WLan anzumelden
 void connectToWiFi()
 {
     WiFi.begin(ssid, password);
@@ -25,7 +22,7 @@ void connectToWiFi()
     Serial.println("\nWlanverbindung fehlgeschlagen");
     startAccessPoint();
 }
-
+// Startet einen AP
 void startAccessPoint()
 {
     WiFi.softAP("ESP32-AP", "Passwort123");
@@ -39,4 +36,20 @@ void changeWiFiCredentials(const char *newSSID, const char *newPassword)
     delay(1000);
     WiFi.begin(newSSID, newPassword);
     Serial.println("Verbindung zum neuen WLAN wird hergestellt...");
+}
+// Startet einen Webserver
+void webserverstart()
+{
+    // Route to handle requests and provide HTML page with array values
+    server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
+              {
+    String html = "<html><body><h1>Array values:</h1><ul>";
+    for (size_t i = 0; i < sizeof(TimerArray) / sizeof(TimerArray[0]); i++) {
+      html += "<li>" + String((long)TimerArray[i]) + "</li>";
+    }
+    html += "</ul></body></html>";
+    request->send(200, "text/html", html); });
+
+    // Start server
+    server.begin();
 }

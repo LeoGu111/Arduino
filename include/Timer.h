@@ -23,21 +23,22 @@ struct Time
     int seconds;
 };
 
-//    bool aktiv = false;
-//    double long maxWert;
-
 //-------------------------------------------------------------------------------
 
 //  #function defines
 
 //-------------------------------------------------------------------------------
 
-Time convertFromIndustrialHours(double long totalSeconds);
+Time convert_to_HMS(long double totalSeconds);
 void Timer_Main();
 
 extern long double Timer_1;
 extern long double Timer_2;
 extern long double Timer_3;
+extern long double Timer_1_1;
+extern long double Timer_2_1;
+extern long double Timer_3_1;
+
 
 extern unsigned long previousMillis; // Variable zum Speichern der letzten Zeitmessung
 extern const unsigned long interval; // Intervall in Millisekunden (hier 1 Sekunde)

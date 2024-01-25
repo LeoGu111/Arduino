@@ -1,5 +1,6 @@
 #include <display.h>
 
+// Konfiguriere die Pins für den Encoder
 void Setup_Encoder()
 {
   pinMode(PIN_SW, INPUT);
@@ -8,7 +9,7 @@ void Setup_Encoder()
   ESP32Encoder::useInternalWeakPullResistors = UP;
   encoder.attachSingleEdge(PIN_DT, PIN_CLK);
 }
-
+// Lese die aktuelle Position des Encoders
 void encoder_position()
 {
   // Lese die aktuelle Position des Encoders
@@ -27,7 +28,7 @@ void encoder_position()
     encoder.setCount(pos);
   }
 }
-
+// debounced die position
 bool debounceEncoder(int rawPosition, int lastPosition)
 {
 

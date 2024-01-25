@@ -1,39 +1,45 @@
 #include <display.h>
 #include <wlan.h>
-#include "webserver.h"
-#include <ESPAsyncWebServer.h>
+#include <neoplixel.h>
 
-#define PIN_Timer_1 13
-#define PIN_Timer_2 12
-#define PIN_Timer_3 14
+//--------------------------------------------------------------------------------------------------------------------------------------
+// Globale Variablen -------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------------------------
+double long Timer_1 = 0;                                                                         // Aktiver Timer 1
+double long Timer_2 = 0;                                                                         // Aktiver Timer 2
+double long Timer_3 = 0;                                                                         // Aktiver Timer 3
+double long Timer_1_1 = 0;                                                                       // reference für Timer 1
+double long Timer_2_1 = 0;                                                                       //  reference für Timer 2
+double long Timer_3_1 = 0;                                                                       //  reference für Timer 3
+unsigned long previousMillis = 0;                                                                // Variable zum Speichern der letzten Zeitmessung
+const unsigned long interval = 1000;                                                             // Intervall in Millisekunden (hier 1 Sekunde)
+int Number = 1;                                                                                  // Nummer für die speicher übergabe von dem Timer Array
+int pos = 0;                                                                                     // position vom Encoder
+double long TimerArray[12] = {60, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 3600, 7200}; // Timer Array
+int anzahl_timer = sizeof(TimerArray) / sizeof(TimerArray[0]);                                   // Wie viele Timer vorhanden sind
+bool Menue_Timer_1 = 0;                                                                          // Menue das die laufenden Timer anzeigt EIN
+bool SUB_ACTIVE = 0;                                                                             // Menue wo man timer auswählen kann um sie zustarten EIN
+bool SUB_ACTIVE_2 = 0;                                                                           // Menue wo man die timer auswählen kann um sie ein zustellen EIN
+bool SUB_ACTIVE_3 = 0;                                                                           // Menue wo man den speicher ort wählen kann
+int previousState = LOW;                                                                         // Vorheriger Zustand des Pins
+unsigned long lastDebounceTime = 0;                                                              // Initialize the last debounce time
+int lastPosition = 0;                                                                            // Initialize the last position
+const int debounceDelay = 75;                                                                    // Debounce delay in milliseconds
+bool PIN_SW_PF = HIGH;                                                                           // PIN vom enconder Positive Flanke
+double long shortestTimer = 0;                                                                   // Kürzester laufendner Timer
+double long Neuer_shortest_Timer = 0;                                                            // referenz timer
+//--------------------------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------------------------
 
+// Wlan Setup--------------------------------------------------------------------------------------------------------
+
+// WLAN DATEN EINGEBEN
+const char *ssid = "iPhone von Leo";
+const char *password = "Schule2023";
 AsyncWebServer server(80);
 
-double long Timer_1 = 0;
-double long Timer_2 = 0;
-double long Timer_3 = 0;
-unsigned long previousMillis = 0;    // Variable zum Speichern der letzten Zeitmessung
-const unsigned long interval = 1000; // Intervall in Millisekunden (hier 1 Sekunde)
-int Number = 1;
-int pos = 0;
-double long floatArray[12] = {60, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 3600, 7200};
-int anzahl_timer = sizeof(floatArray) / sizeof(floatArray[0]);
-bool countdownStarted = false;
-bool Menue_Timer_1 = 0;
-bool SUB_ACTIVE = 0;
-bool SUB_ACTIVE_2 = 0;
-bool SUB_ACTIVE_3 = 0;
-int previousState = LOW;            // Vorheriger Zustand des Pins
-unsigned long lastDebounceTime = 0; // Initialize the last debounce time
-int lastPosition = 0;               // Initialize the last position
-const int debounceDelay = 75;       // Debounce delay in milliseconds
-bool PIN_SW_PF = HIGH;
-double long shortestTimer = 0;
-double long Neuer_shortest_Timer = 0;
-bool timer_neu_Ausgewaehlt = 0;
-
-void updateLEDsBasedOnShortestTimer();
-void findshortestTimer();
+// Neopixel Setup--------------------------------------------------------------------------------------------------------
 
 Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_RGB + NEO_KHZ800);
 
@@ -46,12 +52,11 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 RTC_DS3231 rtc;
 char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
-//------------------------------------------------------------------------------------------------------------------
+// Encoder Setup--------------------------------------------------------------------------------------------------------
 
 ESP32Encoder encoder;
 
 //------------------------------------------------------------------------------------------------------------------
-
 
 void setup()
 {
@@ -72,30 +77,32 @@ void setup()
             ; // Don't proceed, loop forever
     }
 
+    // Einlesen der Taster für direkt auswahl von den Timern
+
     pinMode(PIN_Timer_1, INPUT_PULLDOWN);
     pinMode(PIN_Timer_2, INPUT_PULLDOWN);
     pinMode(PIN_Timer_3, INPUT_PULLDOWN);
 
+    // Setup vom encoder
     Setup_Encoder();
-    connectToWiFi();
-  // Route to handle requests and provide HTML page with array values
-  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-    String html = "<html><body><h1>Array values:</h1><ul>";
-    for (size_t i = 0; i < sizeof(floatArray) / sizeof(floatArray[0]); i++) {
-      html += "<li>" + String((long)floatArray[i]) + "</li>";
-    }
-    html += "</ul></body></html>";
-    request->send(200, "text/html", html);
-  });
 
-  // Start server
-  server.begin();
+    // Gerät versucht eine verbindung zum Wlan herzustellen nach 15 sekund gibt es auf
+    // und startet sein eigenes Wlan
+    connectToWiFi();
+
+    // Nach dem es Wlan hat startet es einen Webserver
+    webserverstart();
+
+    // Zeigt eine Kurze start seqeunz an
     display_Start_sequenz();
+
+    // Zum setzen der Aktuellen uhrzeit bitte das untens stehende ein setzen
     // rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
 }
 
 void loop()
 {
+    // die nächsten 6 zeilen machen aus unserm PIN_SW eine positive Flanke
     int currentState = digitalRead(PIN_SW);
     PIN_SW_PF = HIGH;
     if (currentState == LOW && previousState == HIGH)
@@ -103,107 +110,28 @@ void loop()
         PIN_SW_PF = LOW;
     }
 
+    // ab hier startet unser haupt programm
+    // in der timer main wird die abgelaufene zeit seit start vom timer abgezogen
     Timer_Main();
 
-    findshortestTimer();
-    updateLEDsBasedOnShortestTimer();
-
+    // die zwei fuktionen werden benutzt um die neo pixel zu steuern
+    Neopixel_funtkion();
+    // holt die encoder position entprellt die und schriebt die auf POS
     encoder_position();
+    // meneu auswahl ist das haupt menue und menue Timer zeigt die aktiven timer an
     menue_Auswahl();
     Menue_Timer_Anzeige();
-
+    // menue timer auswahl ist das menue wo man seine timer wählen kann und
+    // speicher auswahl fragt ob man in Timer 1 oder Timer 2 oder Timer 3 staren will
     speicher_Auswahl();
     Menue_Timer_Auswahl();
-
+    // menue timer einstellen is das menu wo man seine timer wählen kann um diese um zu speichern
+    // Timer einstellen ist dazu da das man die Timmer einstellt
     Timer_Einstellen();
     Menue_Timer_Einstellen();
-
-    if (digitalRead(PIN_Timer_1) == HIGH)
-    {
-        Timer_1 = floatArray[0];
-        Menue_Timer_1 = 1;
-    }
-    if (digitalRead(PIN_Timer_2) == HIGH)
-    {
-        Timer_2 = floatArray[1];
-        Menue_Timer_1 = 1;
-    }
-    if (digitalRead(PIN_Timer_3) == HIGH)
-    {
-        Timer_3 = floatArray[2];
-        Menue_Timer_1 = 1;
-    }
-
-    Serial.printf("%d, %d, %d", digitalRead(PIN_Timer_1), digitalRead(PIN_Timer_2), digitalRead(PIN_Timer_3));
-
-    if ((Timer_1 != shortestTimer) and (Timer_2 != shortestTimer) and (Timer_3 != shortestTimer))
-    {
-        timer_neu_Ausgewaehlt = true;
-    }
-    else
-    {
-        timer_neu_Ausgewaehlt = false;
-    }
+    // Taster funktion für schnell zugriff ind display done bildschirm
+    Tasterfunktion();
+    Display_Timer_Done();
 
     previousState = currentState;
 }
-
-// NeoPixel Anzeige----------------------------------------------------------------------
-void findshortestTimer()
-{
-
-    if (Timer_1 > 0)
-    {
-        shortestTimer = Timer_1;
-
-        if (timer_neu_Ausgewaehlt)
-        {
-            Neuer_shortest_Timer = Timer_1;
-        }
-    }
-
-    if (Timer_2 > 0 && Timer_2 <= shortestTimer)
-    {
-        shortestTimer = Timer_2;
-
-        if (timer_neu_Ausgewaehlt)
-        {
-            Neuer_shortest_Timer = Timer_2;
-        }
-    }
-
-    if (Timer_3 > 0 && Timer_3 <= shortestTimer)
-    {
-        shortestTimer = Timer_3;
-        if (timer_neu_Ausgewaehlt)
-        {
-            Neuer_shortest_Timer = Timer_3;
-        }
-    }
-}
-
-void updateLEDsBasedOnShortestTimer()
-{
-    int ledsToShow = map(shortestTimer, 1, Neuer_shortest_Timer, 1, LED_COUNT);
-
-    if (Neuer_shortest_Timer <= 0)
-    {
-        ledsToShow = 0;
-    }
-
-    printf("%d", ledsToShow);
-    // printf("%d", Neuer_shortest_Timer);
-    for (int i = 0; i < LED_COUNT; i++)
-    {
-        if (i < ledsToShow)
-        {
-            strip.setPixelColor(i, strip.Color(0, 20, 0)); // Grün für abgelaufene Zeit
-        }
-        else
-        {
-            strip.setPixelColor(i, strip.Color(0, 0, 0)); // Aus für verbleibende Zeit
-        }
-    }
-    strip.show();
-}
-

@@ -1,5 +1,5 @@
-#ifndef ESP32_Wlan
-#define ESP32_Wlan
+#ifndef ESP32_Neopixel
+#define ESP32_Neopixel
 
 //-------------------------------------------------------------------------------
 
@@ -7,8 +7,7 @@
 
 //-------------------------------------------------------------------------------
 
-#include <WiFi.h>
-#include <ESPAsyncWebServer.h>
+#include <Adafruit_NeoPixel.h>
 
 //-------------------------------------------------------------------------------
 
@@ -16,20 +15,30 @@
 
 //-------------------------------------------------------------------------------
 
+#define LED_PIN 25
+#define LED_COUNT 8
+
 //-------------------------------------------------------------------------------
 
 //  #function defines
 
 //-------------------------------------------------------------------------------
 
-void connectToWiFi();
-void startAccessPoint();
-void changeWiFiCredentials(const char *newSSID, const char *newPassword);
-void webserverstart();
 
-extern AsyncWebServer server; 
-extern const char *ssid;
-extern const char *password;
-extern double long TimerArray[12];
+void Neopixel_funtkion();
+void findshortestTimer();
+void updateLEDsBasedOnShortestTimer();
+
+
+extern long double shortestTimer;
+extern long double Neuer_shortest_Timer;
+extern Adafruit_NeoPixel strip;
+extern long double Timer_1;
+extern long double Timer_2;
+extern long double Timer_3;
+extern long double Timer_1_1;
+extern long double Timer_2_1;
+extern long double Timer_3_1;
+
 
 #endif

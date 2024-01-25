@@ -14,7 +14,7 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 #include <RTClib.h>
-#include <Adafruit_NeoPixel.h>
+
 
 //-------------------------------------------------------------------------------
 
@@ -33,8 +33,11 @@
 #define PIN_CLK 34
 #define PIN_SW 32
 
-#define LED_PIN 25
-#define LED_COUNT 8
+#define PIN_Timer_1 13
+#define PIN_Timer_2 12
+#define PIN_Timer_3 14
+
+
 
 struct Time_1
 {
@@ -65,9 +68,10 @@ void Menue_Timer_Auswahl();
 void Menue_Timer_Einstellen();
 void speicher_Auswahl();
 void Timer_Einstellen();
+void Tasterfunktion();
+void Display_Timer_Done();
 
-extern double long floatArray[12];
-extern bool countdownStarted;
+extern double long TimerArray[12];
 extern bool Menue_Timer_1;
 extern bool SUB_ACTIVE;
 extern bool SUB_ACTIVE_2;
@@ -81,5 +85,6 @@ extern ESP32Encoder encoder;
 extern char daysOfTheWeek[7][12];
 extern bool PIN_SW_PF;
 extern int anzahl_timer;
+
 
 #endif

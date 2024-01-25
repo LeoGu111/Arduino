@@ -126,12 +126,12 @@ void Menue_Timer(double Timer_1, double Timer_2, double Timer_3)
   display.clearDisplay();
   display.setTextColor(WHITE);
   display.setTextSize(2);
-  display.setCursor(center_function(convertFromIndustrialHours(Timer_1), 12), 2);
-  display.printf("%d:%d:%d", convertFromIndustrialHours(Timer_1));
-  display.setCursor(center_function(convertFromIndustrialHours(Timer_2), 12), 22);
-  display.printf("%d:%d:%d", convertFromIndustrialHours(Timer_2));
-  display.setCursor(center_function(convertFromIndustrialHours(Timer_3), 12), 42);
-  display.printf("%d:%d:%d", convertFromIndustrialHours(Timer_3));
+  display.setCursor(center_function(convert_to_HMS(Timer_1), 12), 2);
+  display.printf("%d:%d:%d", convert_to_HMS(Timer_1));
+  display.setCursor(center_function(convert_to_HMS(Timer_2), 12), 22);
+  display.printf("%d:%d:%d", convert_to_HMS(Timer_2));
+  display.setCursor(center_function(convert_to_HMS(Timer_3), 12), 42);
+  display.printf("%d:%d:%d", convert_to_HMS(Timer_3));
 }
 // SubMenue wo die ersten uhrzeiten angezeigt werden /kommt nach dem bestätigen vom menue punkt "timer" im haupt menue
 void SubMenue_1_1(int X, float H_1, float H_2, float H_3) // X ist die Positon vom Curser für die auswahl
@@ -140,22 +140,22 @@ void SubMenue_1_1(int X, float H_1, float H_2, float H_3) // X ist die Positon v
   display.setTextColor(WHITE);
   display.setTextSize(2);
   // Schreib zentriert die werte für Stunden minuten und sekunden
-  display.setCursor(center_function(convertFromIndustrialHours(H_1), 12), 2);
-  display.printf("%d:%d:%d", convertFromIndustrialHours(H_1));
+  display.setCursor(center_function(convert_to_HMS(H_1), 12), 2);
+  display.printf("%d:%d:%d", convert_to_HMS(H_1));
   // Schreib zentriert die werte für Stunden minuten und sekunden
-  display.setCursor(center_function(convertFromIndustrialHours(H_2), 12), 22);
-  display.printf("%d:%d:%d", convertFromIndustrialHours(H_2));
+  display.setCursor(center_function(convert_to_HMS(H_2), 12), 22);
+  display.printf("%d:%d:%d", convert_to_HMS(H_2));
   // Schreib zentriert die werte für Stunden minuten und sekunden
-  display.setCursor(center_function(convertFromIndustrialHours(H_3), 12), 42);
-  display.printf("%d:%d:%d", convertFromIndustrialHours(H_3));
+  display.setCursor(center_function(convert_to_HMS(H_3), 12), 42);
+  display.printf("%d:%d:%d", convert_to_HMS(H_3));
   // Zeichnet den Curser über die verschiedenen Zeiten
   display.drawRect(0, X, 128, 19, WHITE);
   display.display();
 }
-// funktion um die Uhrzeiten zu zentrien X ist die größe de Buchstaben
-int center_function(Time industrie, int X)
+// funktion um die Uhrzeiten zu zentrien X ist die größe der Buchstaben
+int center_function(Time Zeit, int X)
 {
-  Time convertedTime = industrie;
+  Time convertedTime = Zeit;
 
   int digitCount_H = (convertedTime.hours != 0) ? ((int)log10(abs(convertedTime.hours)) + 1) : 1;
   int digitCount_M = (convertedTime.minutes != 0) ? ((int)log10(abs(convertedTime.minutes)) + 1) : 1;
@@ -167,7 +167,7 @@ int center_function(Time industrie, int X)
 
   return abs(versatz_1);
 }
-
+// Menue wo man home bildschirm und und die auswahl hat
 void menue_Auswahl()
 {
   if (SUB_ACTIVE == 0 and SUB_ACTIVE_2 == 0 and Menue_Timer_1 == 0 and SUB_ACTIVE_3 == 0)
@@ -209,7 +209,7 @@ void menue_Auswahl()
     }
   }
 }
-
+// Menue wo alle aktiven Timer angezeigt werden
 void Menue_Timer_Anzeige()
 {
   if ((pos == 1 and PIN_SW_PF == 0 and SUB_ACTIVE == 0 and SUB_ACTIVE_2 == 0) or Menue_Timer_1)
@@ -227,7 +227,7 @@ void Menue_Timer_Anzeige()
     encoder.setCount(1);
   }
 }
-
+// Menue wo man die timer auswählen kann zum starten
 void Menue_Timer_Auswahl()
 {
   if ((pos == 2 and PIN_SW_PF == 0 and SUB_ACTIVE_2 == 0 and SUB_ACTIVE_3 == 0 and Menue_Timer_1 == 0) or SUB_ACTIVE == 1)
@@ -248,11 +248,11 @@ void Menue_Timer_Auswahl()
     switch (pos)
     {
     case 0:
-      SubMenue_1_1(0, floatArray[0], floatArray[1], floatArray[2]);
+      SubMenue_1_1(0, TimerArray[0], TimerArray[1], TimerArray[2]);
       Number = 0;
       break;
     case 1:
-      SubMenue_1_1(20, floatArray[0], floatArray[1], floatArray[2]);
+      SubMenue_1_1(20, TimerArray[0], TimerArray[1], TimerArray[2]);
       Number = 1;
       break;
     case 2:
@@ -263,44 +263,44 @@ void Menue_Timer_Auswahl()
       }
       else
       {
-        SubMenue_1_1(40, floatArray[0], floatArray[1], floatArray[2]);
+        SubMenue_1_1(40, TimerArray[0], TimerArray[1], TimerArray[2]);
         Number = 2;
       }
       break;
     case 3:
-      SubMenue_1_1(0, floatArray[3], floatArray[4], floatArray[5]);
+      SubMenue_1_1(0, TimerArray[3], TimerArray[4], TimerArray[5]);
       Number = 3;
       break;
     case 4:
-      SubMenue_1_1(20, floatArray[3], floatArray[4], floatArray[5]);
+      SubMenue_1_1(20, TimerArray[3], TimerArray[4], TimerArray[5]);
       Number = 4;
       break;
     case 5:
-      SubMenue_1_1(40, floatArray[3], floatArray[4], floatArray[5]);
+      SubMenue_1_1(40, TimerArray[3], TimerArray[4], TimerArray[5]);
       Number = 5;
       break;
     case 6:
-      SubMenue_1_1(0, floatArray[6], floatArray[7], floatArray[8]);
+      SubMenue_1_1(0, TimerArray[6], TimerArray[7], TimerArray[8]);
       Number = 6;
       break;
     case 7:
-      SubMenue_1_1(20, floatArray[6], floatArray[7], floatArray[8]);
+      SubMenue_1_1(20, TimerArray[6], TimerArray[7], TimerArray[8]);
       Number = 7;
       break;
     case 8:
-      SubMenue_1_1(40, floatArray[6], floatArray[7], floatArray[8]);
+      SubMenue_1_1(40, TimerArray[6], TimerArray[7], TimerArray[8]);
       Number = 8;
       break;
     case 9:
-      SubMenue_1_1(0, floatArray[9], floatArray[10], floatArray[11]);
+      SubMenue_1_1(0, TimerArray[9], TimerArray[10], TimerArray[11]);
       Number = 9;
       break;
     case 10:
-      SubMenue_1_1(20, floatArray[9], floatArray[10], floatArray[11]);
+      SubMenue_1_1(20, TimerArray[9], TimerArray[10], TimerArray[11]);
       Number = 10;
       break;
     case 11:
-      SubMenue_1_1(40, floatArray[9], floatArray[10], floatArray[11]);
+      SubMenue_1_1(40, TimerArray[9], TimerArray[10], TimerArray[11]);
       Number = 11;
       break;
     case 12:
@@ -327,7 +327,7 @@ void Menue_Timer_Auswahl()
     }
   }
 }
-
+// Menue wo man die Timer auswählen kann zum einstellen der gespeicherten zeit
 void Menue_Timer_Einstellen()
 {
   if ((pos == 3 and PIN_SW_PF == 0 and SUB_ACTIVE == 0 and SUB_ACTIVE_3 == 0 and Menue_Timer_1 == 0 and pos < anzahl_timer + 1) or SUB_ACTIVE_2 == 1)
@@ -336,15 +336,15 @@ void Menue_Timer_Einstellen()
     switch (pos)
     {
     case 0:
-      SubMenue_1_1(0, floatArray[0], floatArray[1], floatArray[2]);
+      SubMenue_1_1(0, TimerArray[0], TimerArray[1], TimerArray[2]);
       Number = 0;
       break;
     case 1:
-      SubMenue_1_1(20, floatArray[0], floatArray[1], floatArray[2]);
+      SubMenue_1_1(20, TimerArray[0], TimerArray[1], TimerArray[2]);
       Number = 1;
       break;
     case 2:
-      SubMenue_1_1(40, floatArray[0], floatArray[1], floatArray[2]);
+      SubMenue_1_1(40, TimerArray[0], TimerArray[1], TimerArray[2]);
       Number = 2;
       break;
     case 3:
@@ -356,41 +356,41 @@ void Menue_Timer_Einstellen()
       }
       else
       {
-        SubMenue_1_1(0, floatArray[3], floatArray[4], floatArray[5]);
+        SubMenue_1_1(0, TimerArray[3], TimerArray[4], TimerArray[5]);
         Number = 3;
         break;
       }
 
     case 4:
-      SubMenue_1_1(20, floatArray[3], floatArray[4], floatArray[5]);
+      SubMenue_1_1(20, TimerArray[3], TimerArray[4], TimerArray[5]);
       Number = 4;
       break;
     case 5:
-      SubMenue_1_1(40, floatArray[3], floatArray[4], floatArray[5]);
+      SubMenue_1_1(40, TimerArray[3], TimerArray[4], TimerArray[5]);
       Number = 5;
       break;
     case 6:
-      SubMenue_1_1(0, floatArray[6], floatArray[7], floatArray[8]);
+      SubMenue_1_1(0, TimerArray[6], TimerArray[7], TimerArray[8]);
       Number = 6;
       break;
     case 7:
-      SubMenue_1_1(20, floatArray[6], floatArray[7], floatArray[8]);
+      SubMenue_1_1(20, TimerArray[6], TimerArray[7], TimerArray[8]);
       Number = 7;
       break;
     case 8:
-      SubMenue_1_1(40, floatArray[6], floatArray[7], floatArray[8]);
+      SubMenue_1_1(40, TimerArray[6], TimerArray[7], TimerArray[8]);
       Number = 8;
       break;
     case 9:
-      SubMenue_1_1(0, floatArray[9], floatArray[10], floatArray[11]);
+      SubMenue_1_1(0, TimerArray[9], TimerArray[10], TimerArray[11]);
       Number = 9;
       break;
     case 10:
-      SubMenue_1_1(20, floatArray[9], floatArray[10], floatArray[11]);
+      SubMenue_1_1(20, TimerArray[9], TimerArray[10], TimerArray[11]);
       Number = 10;
       break;
     case 11:
-      SubMenue_1_1(40, floatArray[9], floatArray[10], floatArray[11]);
+      SubMenue_1_1(40, TimerArray[9], TimerArray[10], TimerArray[11]);
       Number = 11;
       break;
     case 12:
@@ -417,7 +417,7 @@ void Menue_Timer_Einstellen()
     }
   }
 }
-
+// Menue zum Auswählen auf welchen slot man die timer speichern will
 void speicher_Auswahl()
 {
   if ((SUB_ACTIVE == 1 and SUB_ACTIVE_2 == 0 and Menue_Timer_1 == 0 and PIN_SW_PF == 0 and pos < anzahl_timer) or SUB_ACTIVE_3 == 1)
@@ -426,12 +426,13 @@ void speicher_Auswahl()
 
     if (pos < 0)
     {
-      pos = -1;
+      pos = 0;
     }
     else if (pos > 2)
     {
       pos = 2;
     }
+
     switch (pos)
     {
     case 0:
@@ -440,7 +441,8 @@ void speicher_Auswahl()
       display.display();
       if (PIN_SW_PF == 0 and SUB_ACTIVE_3 == 1)
       {
-        Timer_1 = floatArray[Number];
+        Timer_1 = TimerArray[Number];
+        Timer_1_1 = TimerArray[Number];
         SUB_ACTIVE_3 = 0;
         Menue_Timer_1 = 1;
         break;
@@ -453,7 +455,8 @@ void speicher_Auswahl()
       display.display();
       if (PIN_SW_PF == 0 and SUB_ACTIVE_3 == 1)
       {
-        Timer_2 = floatArray[Number];
+        Timer_2 = TimerArray[Number];
+        Timer_2_1 = TimerArray[Number];
         SUB_ACTIVE_3 = 0;
         Menue_Timer_1 = 1;
         break;
@@ -466,21 +469,18 @@ void speicher_Auswahl()
       display.display();
       if (PIN_SW_PF == 0 and SUB_ACTIVE_3 == 1)
       {
-        Timer_3 = floatArray[Number];
+        Timer_3 = TimerArray[Number];
+        Timer_3_1 = TimerArray[Number];
         SUB_ACTIVE_3 = 0;
         Menue_Timer_1 = 1;
         break;
       }
       SUB_ACTIVE_3 = 1;
       break;
-      if (pos < 0)
-      {
-        encoder.setCount(0);
-      }
     }
-  } 
+  }
 }
-
+// Menue wo man die timer einstellen kann
 void Timer_Einstellen()
 {
   if ((SUB_ACTIVE == 0 and SUB_ACTIVE_2 == 1 and Menue_Timer_1 == 0 and PIN_SW_PF == 0 and pos < anzahl_timer))
@@ -505,12 +505,12 @@ void Timer_Einstellen()
       if (PIN_SW_PF == 0)
       {
         i++;
-        pos = -1;
+        pos = 0;
       }
       else if (i > 3)
       {
         pos = Number - 2;
-        floatArray[Number] = Zeit;
+        TimerArray[Number] = Zeit;
         break;
       }
 
@@ -518,7 +518,7 @@ void Timer_Einstellen()
 
       if (pos < 0)
       {
-        pos = -1;
+        pos = 0;
       }
 
       switch (i)
@@ -535,22 +535,22 @@ void Timer_Einstellen()
         H = pos;
         break;
       case 2:
-        if (M < pos and 0 < pos)
+        if (M < pos)
         {
           Zeit = Zeit + 60;
         }
-        else if (M > pos and 0 < pos)
+        else if (M > pos)
         {
           Zeit = Zeit - 60;
         }
         M = pos;
         break;
       case 3:
-        if (S < pos and 0 < pos)
+        if (S < pos)
         {
           Zeit = Zeit + 1;
         }
-        else if (S > pos and 0 < pos)
+        else if (S > pos)
         {
           Zeit = Zeit - 1;
         }
@@ -559,11 +559,43 @@ void Timer_Einstellen()
       }
 
       display.clearDisplay();
-      display.setCursor(center_function(convertFromIndustrialHours(Zeit), 12), 22);
-      display.printf("%d:%d:%d", convertFromIndustrialHours(Zeit));
+      display.setCursor(center_function(convert_to_HMS(Zeit), 12), 22);
+      display.printf("%d:%d:%d", convert_to_HMS(Zeit));
       display.display();
 
       previousState = state;
     }
+  }
+}
+// Display wenn ein timer fertig wird 
+void Display_Timer_Done()
+{
+
+  if (Timer_1 <= 0.5 && Timer_1 > 0.1)
+  {
+    display.clearDisplay();
+    display.setCursor(0, 22);
+    display.printf("Timer_1   Done");
+    display.display();
+    delay(1000);
+    Timer_1_1 = 0;
+  }
+  if (Timer_2 <= 0.5 && Timer_2 > 0.1)
+  {
+    display.clearDisplay();
+    display.setCursor(0, 22);
+    display.printf("Timer_2   Done");
+    display.display();
+    delay(1000);
+    Timer_2_1 = 0;
+  }
+  if (Timer_3 <= 0.5 && Timer_3 > 0.1)
+  {
+    display.clearDisplay();
+    display.setCursor(0, 22);
+    display.printf("Timer_3   Done");
+    display.display();
+    delay(1000);
+    Timer_3_1 = 0;
   }
 }
