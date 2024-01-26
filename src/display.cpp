@@ -20,7 +20,7 @@ void display_starting_screen()
 
   display.drawRect(12, 24, 104, 16, WHITE);
   display.display();
-  delay(500);
+  delay(1500);
 }
 // funktion für die Start up sequenz
 void display_starting_screen_1()
