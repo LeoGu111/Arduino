@@ -8,19 +8,19 @@ void display_starting_screen()
   display.setTextSize(2);
   display.drawRect(0, 0, 128, 64, WHITE);
   display.display();
-  delay(1);
+  delay(500);
 
   display.drawRect(4, 8, 120, 48, WHITE);
   display.display();
-  delay(1);
+  delay(500);
 
   display.drawRect(8, 16, 112, 32, WHITE);
   display.display();
-  delay(1);
+  delay(500);
 
   display.drawRect(12, 24, 104, 16, WHITE);
   display.display();
-  delay(1);
+  delay(500);
 }
 // funktion für die Start up sequenz
 void display_starting_screen_1()
